@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CatApp</string>
+    <string name="random_cat_facts">Random Cat Facts</string>
+</resources>
