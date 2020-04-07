@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">CatApp</string>
     <string name="random_cat_facts">Random Cat Facts</string>
+    <string name="cat_icon">cat icon</string>
+    <string name="cat_fact_id">id: %1$s</string>
+    <string name="error_image">error image</string>
 </resources>

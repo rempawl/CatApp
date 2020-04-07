@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_cat_list_fragment">
 
     <fragment
-        android:name="com.example.catapp.catList.CatFactsListFragment"
+        android:name="com.example.catapp.catFactsIdsList.CatFactsListFragment"
         android:id="@+id/navigation_cat_list_fragment"
         android:label="@string/random_cat_facts"
             >

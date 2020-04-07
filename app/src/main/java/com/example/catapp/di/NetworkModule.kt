@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 @Module
 object NetworkModule {
@@ -18,18 +19,24 @@ object NetworkModule {
     @Provides
     @Reusable
     @JvmStatic
-    internal fun provideCatFactsApi(retrofit: Retrofit): CatFactsApi {
+    fun provideCatFactsApi(retrofit: Retrofit): CatFactsApi {
         return retrofit.create(CatFactsApi::class.java)
     }
-
 
     @Provides
     @Reusable
     @JvmStatic
-    internal fun provideRetrofitInterface(): Retrofit {
-         val moshi = Moshi.Builder()
+    fun provideMoshi() : Moshi{
+        return Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
+    }
+
+    @Provides
+    @Reusable
+    @JvmStatic
+    fun provideRetrofitInterface(moshi : Moshi): Retrofit {
+//            .addConverterFactory(ScalarsConverterFactory.create())
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
