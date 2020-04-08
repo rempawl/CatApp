@@ -1,13 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".catFactDetails.CatFactDetailsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.catapp.catFactDetails.CatFactDetailsViewModel" />
+        <variable
+            name="catFact"
+            type="com.example.catapp.data.CatFact" />
+    </data>
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        tools:context=".catFactDetails.CatFactDetailsFragment">
 
-</FrameLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:isNetworkError="@{viewModel.isNetworkError()}"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.errorMessage}"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <ImageView
+                    android:id="@+id/error_view"
+                    android:src="@drawable/error_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/error_image"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:isLoading="@{!viewModel.isLoading()}"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/fact_text"
+                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{@string/fact_text(catFact.text)}"
+                android:layout_margin="20dp"
+                android:textSize="25sp"
+                />
+
+
+            <TextView
+                app:layout_constraintTop_toBottomOf="@id/fact_text"
+                android:textAlignment="center"
+                android:id="@+id/update_date"
+                android:textSize="25sp"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{@string/update_date(catFact.formatDate())}"
+                />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/loading_spinner"
+                app:isLoading="@{viewModel.isLoading()}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </FrameLayout>
+</layout>

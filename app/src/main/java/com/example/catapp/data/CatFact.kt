@@ -1,9 +1,20 @@
 package com.example.catapp.data
 
-import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+
+@JsonClass(generateAdapter = true)
 data class CatFact(
-    @Json(name = "_id") val id: Long,
-    @Json(name = "text") val text: String,
-    @Json(name = "updatedAt") val updateDate: String
-)
+    val text: String,
+    val updatedAt: String
+) {
+    fun formatDate(): String {
+
+        return updatedAt
+            .split("T")[0]
+            .split("-")
+            .reversed()
+            .joinToString(" - ")
+    }
+
+}

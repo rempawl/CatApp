@@ -1,15 +1,15 @@
 package com.example.catapp.catFactDetails
 
 import android.content.Context
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.example.catapp.MainActivity
-
-import com.example.catapp.R
+import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import javax.inject.Inject
 
 class CatFactDetailsFragment : Fragment() {
@@ -19,23 +19,45 @@ class CatFactDetailsFragment : Fragment() {
     }
 
     @Inject
-    lateinit var viewModel: CatFactDetailsViewModel
+    lateinit var viewModelFactory: CatFactDetailsViewModel.Factory
 
+    private val args: CatFactDetailsFragmentArgs by navArgs()
+
+    private val viewModel: CatFactDetailsViewModel by lazy {
+        viewModelFactory.create(args.id)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         (activity as MainActivity).appComponent.inject(this)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.cat_fact_details_fragment, container, false)
+
+        val binding = CatFactDetailsFragmentBinding
+            .inflate(inflater, container, false)
+
+
+
+        setUpBinding(binding)
+
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    private fun setUpBinding(binding: CatFactDetailsFragmentBinding) {
+        binding.viewModel = this.viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        viewModel.items.observe(viewLifecycleOwner, Observer { fact ->
+            binding.catFact = fact
+
+        })
+
+
     }
 
 }

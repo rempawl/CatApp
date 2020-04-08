@@ -14,5 +14,5 @@ interface CatFactsApi {
     fun getCatFacts(@Query("amount") amount : Int = FACTS_AMOUNT) : Single<List<CatFactId>>
 
     @GET("/facts/{id}" )
-    fun getCatFact(@Path("id") id : String) : Single<String>
+    fun getCatFact(@Path("id") id : String) : Single<CatFact>
 }

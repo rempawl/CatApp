@@ -3,6 +3,8 @@ package com.example.catapp.data
 import io.reactivex.Observable
 import io.reactivex.Single
 
-interface CatRepository {
+interface CatFactRepository {
     fun getCatFactsIds(): Single<List<CatFactId>>
+
+    fun getCatFact(id: String) : Single<CatFact>
 }

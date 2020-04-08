@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.catapp.catFactsIdsList.CatFactsListViewModel" />
+            type="com.example.catapp.catFactsIdsList.CatFactsIdsViewModel" />
 
     </data>
 
@@ -20,15 +20,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/error_view"
-                app:isNetworkError="@{viewModel.isNetworkError()}"
-                android:visibility="gone"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/error_image"
-                android:src="@drawable/error_image"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:isNetworkError="@{viewModel.isNetworkError()}"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.errorMessage}"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <ImageView
+                    android:id="@+id/error_view"
+                    android:src="@drawable/error_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/error_image"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/loading_spinner"
@@ -46,14 +61,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/error_view" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:onClick="@{() -> viewModel.refresh()}"
                 android:id="@+id/refresh_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
+                android:onClick="@{() -> viewModel.refresh()}"
                 android:src="@drawable/ic_refresh_black_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />

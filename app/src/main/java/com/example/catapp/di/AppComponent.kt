@@ -6,11 +6,11 @@ import com.example.catapp.catFactsIdsList.CatFactsListFragment
 import dagger.BindsInstance
 import dagger.Component
 
-@Component(modules = [DataModule::class, NetworkModule::class])
+@Component(modules = [DataModule::class, NetworkModule::class,AssistedInjectModule::class])
 interface AppComponent {
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance context: Context): AppComponent
+        fun create(): AppComponent
     }
 
     fun inject(catListFragment: CatFactsListFragment)

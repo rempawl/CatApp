@@ -6,9 +6,10 @@ import androidx.databinding.BindingAdapter
 
 @BindingAdapter("isNetworkError" )
 fun showWhenIsNetworkError(view: View, isNetworkError: Boolean) {
-    if(isNetworkError) {
-        view.visibility = View.GONE
-    }
+    view.visibility =if(isNetworkError) {
+          View.VISIBLE
+    }else
+        View.GONE
 }
 
 @BindingAdapter("isLoading")

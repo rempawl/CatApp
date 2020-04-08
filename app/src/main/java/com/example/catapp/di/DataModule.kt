@@ -1,9 +1,8 @@
 package com.example.catapp.di
 
-import com.example.catapp.catFactsIdsList.DefaultJsonParser
-import com.example.catapp.catFactsIdsList.JsonParser
-import com.example.catapp.data.CatRepository
-import com.example.catapp.data.DefaultCatRepository
+
+import com.example.catapp.data.CatFactRepository
+import com.example.catapp.data.DefaultCatFactRepository
 import dagger.Binds
 import dagger.Module
 
@@ -11,10 +10,7 @@ import dagger.Module
 interface DataModule {
 
     @Binds
-    fun provideCatRepository(catRepository: DefaultCatRepository) : CatRepository
-
-    @Binds
-    fun provideJsonParser(jsonParser: DefaultJsonParser) : JsonParser
+    fun provideCatRepository(catRepository: DefaultCatFactRepository) : CatFactRepository
 
 
 }

@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navi"
     app:startDestination="@id/navigation_cat_list_fragment">
 
     <fragment
-        android:name="com.example.catapp.catFactsIdsList.CatFactsListFragment"
         android:id="@+id/navigation_cat_list_fragment"
-        android:label="@string/random_cat_facts"
-            >
+        android:name="com.example.catapp.catFactsIdsList.CatFactsListFragment"
+        android:label="@string/random_cat_facts">
 
         <action
-            app:destination="@id/navigation_cat_fact_details"
             android:id="@+id/navigation_cat_list_fragment_to_navigation_cat_fact_details"
-            />
+            app:destination="@id/navigation_cat_fact_details" />
     </fragment>
 
     <fragment
-        android:name="com.example.catapp.catFactDetails.CatFactDetailsFragment"
         android:id="@+id/navigation_cat_fact_details"
-        android:label="Cat fact details"
-        />
+        android:name="com.example.catapp.catFactDetails.CatFactDetailsFragment"
+        android:label="Cat fact details">
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="false"
+            />
+    </fragment>
 
 </navigation>
