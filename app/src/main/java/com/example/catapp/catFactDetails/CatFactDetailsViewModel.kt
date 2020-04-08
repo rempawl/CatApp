@@ -2,6 +2,7 @@ package com.example.catapp.catFactDetails
 
 import android.util.Log
 import com.example.catapp.CatFactViewModel
+import com.example.catapp.ErrorModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.squareup.inject.assisted.Assisted
@@ -10,8 +11,9 @@ import io.reactivex.Single
 
 class CatFactDetailsViewModel @AssistedInject constructor(
     catFactRepository: CatFactRepository,
-    @Assisted private val factId: String
-) : CatFactViewModel<CatFact>(catFactRepository) {
+    @Assisted private val factId: String,
+    errorModel: ErrorModel
+) : CatFactViewModel<CatFact>(catFactRepository,errorModel = errorModel) {
 
     @AssistedInject.Factory
     interface Factory {

@@ -8,7 +8,10 @@ import com.example.catapp.catFactsIdsList.CatFactsListFragment
 import dagger.BindsInstance
 import dagger.Component
 
-@Component(modules = [DataModule::class, NetworkModule::class,AssistedInjectModule::class])
+@Component(
+    modules = [DataModule::class, ModelModule::class,
+        NetworkModule::class, AssistedInjectModule::class]
+)
 interface AppComponent {
     @Component.Factory
     interface Factory {
@@ -16,8 +19,8 @@ interface AppComponent {
     }
 
 
-    val catFactsIdsViewModel : CatFactsIdsViewModel
-    val catFactDetailsViewModelFactory : CatFactDetailsViewModel.Factory
+    val catFactsIdsViewModel: CatFactsIdsViewModel
+    val catFactDetailsViewModelFactory: CatFactDetailsViewModel.Factory
 
     fun inject(catListFragment: CatFactsListFragment)
 }

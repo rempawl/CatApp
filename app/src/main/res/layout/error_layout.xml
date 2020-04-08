@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="errorModel"
+            type="com.example.catapp.ErrorModel" />
+    </data>
+    <ImageView
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/error_image"
+        app:showWhen="@{errorModel.isErrorActive()}"
+        android:visibility="gone"
+        android:src="@drawable/error_image"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</layout>
