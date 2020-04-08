@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:isNetworkError="@{viewModel.isNetworkError()}"
+                app:showWhen="@{viewModel.isNetworkError()}"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView

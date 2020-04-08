@@ -4,8 +4,8 @@ import android.util.Log
 import android.view.View
 import androidx.databinding.BindingAdapter
 
-@BindingAdapter("isNetworkError" )
-fun showWhenIsNetworkError(view: View, isNetworkError: Boolean) {
+@BindingAdapter("showWhen" )
+fun showWhen(view: View, isNetworkError: Boolean) {
     view.visibility =if(isNetworkError) {
           View.VISIBLE
     }else

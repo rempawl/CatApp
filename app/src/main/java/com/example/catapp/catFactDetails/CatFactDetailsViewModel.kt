@@ -1,6 +1,7 @@
 package com.example.catapp.catFactDetails
 
-import com.example.catapp.catFactsIdsList.CatFactViewModel
+import android.util.Log
+import com.example.catapp.CatFactViewModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.squareup.inject.assisted.Assisted
@@ -18,8 +19,9 @@ class CatFactDetailsViewModel @AssistedInject constructor(
     }
 
     init {
-        fetchData()
+        Log.d("kruci", "new details")
     }
+
 
     override fun getData(): Single<CatFact> {
 

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.databinding.CatFactsListFragmentBinding
+import com.example.catapp.di.viewModel
 import javax.inject.Inject
 
 
@@ -24,8 +25,9 @@ class CatFactsListFragment : Fragment() {
     }
 
 
-    @Inject
-    lateinit var viewModel: CatFactsIdsViewModel
+    val viewModel: CatFactsIdsViewModel by viewModel {
+        (activity as MainActivity).appComponent.catFactsIdsViewModel
+    }
 
     @Inject
     lateinit var catFactsListAdapter: CatFactsListAdapter
@@ -44,7 +46,6 @@ class CatFactsListFragment : Fragment() {
         val binding = CatFactsListFragmentBinding
             .inflate(inflater, container, false)
             ?: throw  IllegalStateException(" binding is null")
-
         setUpBinding(binding)
         setUpObservers()
         return binding.root
@@ -53,9 +54,10 @@ class CatFactsListFragment : Fragment() {
     private fun setUpObservers() {
         viewModel.items.observe(viewLifecycleOwner, Observer { factsIdsList ->
             catFactsListAdapter.submitList(factsIdsList)
-//            catFactsListAdapter.notifyDataSetChanged()
         })
-
+        viewModel.wasInitialLoadPerformed.observe(viewLifecycleOwner, Observer {
+            if (!it) viewModel.init()
+        })
     }
 
 

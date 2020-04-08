@@ -5,7 +5,9 @@ import com.example.catapp.di.AppComponent
 import com.example.catapp.di.DaggerAppComponent
 
 class MyApp : Application() {
-//todo airplane mode broadcast
+    //todo airplane mode broadcast
+    //todo tests
+    //todo error in details
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create()
     }
