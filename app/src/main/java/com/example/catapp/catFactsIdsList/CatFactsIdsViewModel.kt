@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.catapp.CatFactViewModel
+import com.example.catapp.SchedulerProvider
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
 import io.reactivex.Single
@@ -13,16 +14,13 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
+class CatFactsIdsViewModel @Inject constructor(
+    catFactRepository: CatFactRepository, schedulerProvider: SchedulerProvider
+) : CatFactViewModel<List<CatFactId>>(catFactRepository, schedulerProvider) {
 
-class CatFactsIdsViewModel  @Inject constructor(catFactRepository: CatFactRepository
-) :  CatFactViewModel<List<CatFactId>>(catFactRepository) {
-
-    init {
-        Log.d("kruci"," new one")
-    }
 
     override fun getData(): Single<List<CatFactId>> {
-            return catRepository.getCatFactsIds()
+        return catRepository.getCatFactsIds()
     }
 
 

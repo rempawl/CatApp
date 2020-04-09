@@ -3,6 +3,7 @@ package com.example.catapp.catFactsIdsList
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.databinding.CatFactsListFragmentBinding
 import com.example.catapp.di.viewModel
+import com.example.catapp.network.NetworkCallback
 import javax.inject.Inject
 
 
@@ -32,10 +34,12 @@ class CatFactsListFragment : Fragment() {
     @Inject
     lateinit var catFactsListAdapter: CatFactsListAdapter
 
+    private var binding: CatFactsListFragmentBinding? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (activity as MainActivity).appComponent.inject(this)
+        Log.d("kruci", "on Attach")
 
     }
 
@@ -43,12 +47,19 @@ class CatFactsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = CatFactsListFragmentBinding
+         binding = CatFactsListFragmentBinding
             .inflate(inflater, container, false)
-            ?: throw  IllegalStateException(" binding is null")
-        setUpBinding(binding)
+
+        setUpBinding()
         setUpObservers()
-        return binding.root
+
+        return binding?.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding?.catFactsList?.adapter = null
+        binding = null
     }
 
     private fun setUpObservers() {
@@ -61,8 +72,8 @@ class CatFactsListFragment : Fragment() {
     }
 
 
-    private fun setUpBinding(binding: CatFactsListFragmentBinding) {
-        binding.apply {
+    private fun setUpBinding() {
+        binding?.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@CatFactsListFragment.viewModel
             catFactsList.apply {
@@ -78,5 +89,8 @@ class CatFactsListFragment : Fragment() {
         }
 
     }
+
+
+
 
 }

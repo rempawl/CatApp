@@ -24,7 +24,8 @@ class CatFactsListAdapter @Inject constructor() :
         }
 
         private fun navigateToCatFactDetails(view: View) {
-            val id = binding.catFactId!!._id  //todo
+            val id = binding.catFactId!!._id
+
                 view.findNavController().navigate(
                     CatFactsListFragmentDirections
                         .navigationCatListFragmentToNavigationCatFactDetails(id)

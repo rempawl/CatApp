@@ -1,7 +1,9 @@
 package com.example.catapp.catFactDetails
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import com.example.catapp.CatFactViewModel
+import com.example.catapp.SchedulerProvider
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.squareup.inject.assisted.Assisted
@@ -10,21 +12,17 @@ import io.reactivex.Single
 
 class CatFactDetailsViewModel @AssistedInject constructor(
     catFactRepository: CatFactRepository,
-    @Assisted private val factId: String
-) : CatFactViewModel<CatFact>(catFactRepository) {
+    @Assisted private val factId: String,
+    schedulerProvider: SchedulerProvider
+) : CatFactViewModel<CatFact>(catFactRepository,schedulerProvider) {
 
     @AssistedInject.Factory
     interface Factory {
         fun create(factId: String): CatFactDetailsViewModel
     }
 
-    init {
-        Log.d("kruci", "new details")
-    }
-
 
     override fun getData(): Single<CatFact> {
-
         return catRepository.getCatFact(factId)
     }
 }

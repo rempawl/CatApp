@@ -19,47 +19,53 @@
         android:layout_height="match_parent"
         tools:context=".catFactDetails.CatFactDetailsFragment">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:showWhen="@{viewModel.isNetworkError()}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> viewModel.refresh()}"
+                android:text="@string/try_again"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="30sp" />
+
+            <ImageView
+                android:id="@+id/error_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/error_image"
+                android:src="@drawable/error_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:showWhen="@{viewModel.isNetworkError()}"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@{viewModel.errorMessage}"
-                        android:textAlignment="center"
-                        android:textSize="25sp" />
-
-                    <ImageView
-                        android:id="@+id/error_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/error_image"
-                        android:src="@drawable/error_image"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:visibility="gone"
-                    app:isLoading="@{!viewModel.isLoading()}"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:showWhen="@{!viewModel.isLoading() &amp;&amp; !viewModel.isNetworkError()}">
 
                     <TextView
                         android:id="@+id/fact_text"
