@@ -32,7 +32,6 @@ class CatFactsListFragment : Fragment() {
     @Inject
     lateinit var catFactsListAdapter: CatFactsListAdapter
 
-    var binding : CatFactsListFragmentBinding? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,18 +43,12 @@ class CatFactsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-         binding = CatFactsListFragmentBinding
+        val binding = CatFactsListFragmentBinding
             .inflate(inflater, container, false)
-
-        setUpBinding()
+            ?: throw  IllegalStateException(" binding is null")
+        setUpBinding(binding)
         setUpObservers()
-        return binding!!.root
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding?.catFactsList?.adapter = null
-        binding  = null
+        return binding.root
     }
 
     private fun setUpObservers() {
@@ -68,11 +61,10 @@ class CatFactsListFragment : Fragment() {
     }
 
 
-    private fun setUpBinding() {
-        binding?.apply {
+    private fun setUpBinding(binding: CatFactsListFragmentBinding) {
+        binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = this@CatFactsListFragment.viewModel
-
             catFactsList.apply {
                 adapter = catFactsListAdapter
                 layoutManager =
@@ -80,6 +72,7 @@ class CatFactsListFragment : Fragment() {
                         LinearLayoutManager(requireContext())
                     else
                         GridLayoutManager(requireContext(), SPAN_COUNT)
+
                 setHasFixedSize(true)
             }
         }

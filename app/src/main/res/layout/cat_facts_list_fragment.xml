@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -12,7 +11,6 @@
 
     </data>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,8 +20,30 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include layout="@layout/error_layout"
-                bind:errorModel="@{viewModel.errorModel}"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:showWhen="@{viewModel.isNetworkError()}"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.errorMessage}"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <ImageView
+                    android:id="@+id/error_view"
+                    android:src="@drawable/error_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/error_image"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/loading_spinner"

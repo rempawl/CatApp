@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package com.example.catapp.di
 
 import androidx.fragment.app.Fragment
@@ -14,4 +12,3 @@ inline fun <reified T : ViewModel> Fragment.viewModel(
         override fun <T : ViewModel?> create(modelClass: Class<T>): T = provider() as T
     }
 }
-
