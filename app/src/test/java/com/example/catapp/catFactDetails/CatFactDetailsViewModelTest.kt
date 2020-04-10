@@ -1,11 +1,13 @@
 package com.example.catapp.catFactDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.SchedulerProvider
+import com.example.catapp.DefaultErrorModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.data.DefaultCatFactRepository
+import com.example.catapp.data.formatDate
 import com.example.catapp.getOrAwaitValue
+import com.example.catapp.utils.SchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.every
@@ -13,7 +15,6 @@ import io.mockk.impl.annotations.MockK
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runBlockingTest
 import okhttp3.ResponseBody
 import org.hamcrest.core.Is.`is`
 import org.junit.Before
@@ -28,6 +29,7 @@ import org.mockito.Mock
 import retrofit2.HttpException
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
+import javax.security.auth.DestroyFailedException
 
 @ExperimentalCoroutinesApi
 class CatFactDetailsViewModelTest {
@@ -40,6 +42,7 @@ class CatFactDetailsViewModelTest {
 
     @MockK
     lateinit var schedulerProvider: SchedulerProvider
+
 
     lateinit var viewModel: CatFactDetailsViewModel
 
@@ -54,7 +57,8 @@ class CatFactDetailsViewModelTest {
         viewModel = CatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
-            schedulerProvider = schedulerProvider
+            schedulerProvider = schedulerProvider,
+            errorModel = DefaultErrorModel()
         )
     }
 
@@ -62,6 +66,7 @@ class CatFactDetailsViewModelTest {
     @Test
     fun `When  init is called _wasInitialLoadPerformed is set to true and data is fetched`() {
         every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT)
+
 
         val before = viewModel.wasInitialLoadPerformed.getOrAwaitValue()
         Assertions.assertFalse(before)
@@ -78,25 +83,25 @@ class CatFactDetailsViewModelTest {
         every { repository.getCatFact(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
 
 
-        val before = viewModel.isNetworkError.getOrAwaitValue()
+        val before = viewModel.errorModel.isErrorActive.getOrAwaitValue()
         assertFalse(before)
 
         viewModel.fetchData()
         scheduler.advanceTimeBy(100,TimeUnit.MILLISECONDS)
 
-        val after = viewModel.isNetworkError.getOrAwaitValue()
+        val after = viewModel.errorModel.isErrorActive.getOrAwaitValue()
         assertTrue(after)
     }
 
     @Test
-    fun `when getData returns TEST_CAT_FACT, then items value is TEST_CAT_FACT`(){
+    fun `when CatApi returns TEST_CAT_FACT, then items value is TEST_CAT_FACT`(){
         every { repository.getCatFact(ID) } returns  Single.just(TEST_CAT_FACT)
 
         viewModel.fetchData()
         scheduler.advanceTimeBy(100,TimeUnit.MILLISECONDS)
 
-        val data = viewModel.items.getOrAwaitValue()
-        assertThat(data,`is`(TEST_CAT_FACT))
+        val data = viewModel.catFactDetail.getOrAwaitValue()
+        assertThat(data,`is`(TEST_CAT_FACT_MAPPED))
     }
 
 
@@ -108,6 +113,8 @@ class CatFactDetailsViewModelTest {
             Response.error<CatFact>(404, ResponseBody.create(null, "404 File not Found"))
         const val ID = "123"
         val TEST_CAT_FACT = CatFact("test", "09-04-2020")
+
+        val TEST_CAT_FACT_MAPPED = TEST_CAT_FACT.copy(updatedAt = TEST_CAT_FACT.formatDate())
     }
 
 }

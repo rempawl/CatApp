@@ -8,4 +8,5 @@
     <string name="fact_text">fact: %1$s</string>
     <string name="offline_info">You are offline</string>
     <string name="try_again">Try Again</string>
+    <string name="error_msg">An error ocurred</string>
 </resources>

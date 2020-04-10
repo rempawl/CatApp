@@ -8,13 +8,12 @@ data class CatFact(
     val text: String,
     val updatedAt: String
 ) {
-    fun formatDate(): String {
 
-        return updatedAt
-            .split("T")[0]
-            .split("-")
-            .reversed()
-            .joinToString(" - ")
-    }
-
+}
+fun CatFact.formatDate(): String {
+    return updatedAt
+        .split("T")[0]
+        .split("-")
+        .reversed()
+        .joinToString(" - ")
 }

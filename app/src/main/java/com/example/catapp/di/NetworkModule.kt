@@ -2,19 +2,27 @@ package com.example.catapp.di
 
 import com.example.catapp.MyApp.Companion.BASE_URL
 import com.example.catapp.network.CatFactsApi
+import com.example.catapp.network.NetworkCallback
+import com.example.catapp.utils.DefaultNetworkConnectionListener
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.converter.scalars.ScalarsConverterFactory
+import javax.inject.Singleton
 
 @Module
 object NetworkModule {
+
+    @Provides
+    @JvmStatic
+    @Singleton
+    fun provideNetworkChangeListener() : NetworkCallback.NetworkConnectionListener{
+        return DefaultNetworkConnectionListener()
+    }
 
     @Provides
     @Reusable
@@ -36,12 +44,11 @@ object NetworkModule {
     @Reusable
     @JvmStatic
     fun provideRetrofitInterface(moshi : Moshi): Retrofit {
-//            .addConverterFactory(ScalarsConverterFactory.create())
 
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
     }
 }

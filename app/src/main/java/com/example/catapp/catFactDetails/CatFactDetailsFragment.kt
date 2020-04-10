@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -13,7 +14,7 @@ import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import com.example.catapp.di.viewModel
 import javax.inject.Inject
 
-class CatFactDetailsFragment : Fragment() {
+open class CatFactDetailsFragment : Fragment() {
 
     companion object {
         fun newInstance() = CatFactDetailsFragment()
@@ -23,13 +24,13 @@ class CatFactDetailsFragment : Fragment() {
     private val args: CatFactDetailsFragmentArgs by navArgs()
 
     private val viewModel: CatFactDetailsViewModel by viewModel {
+        injectViewModel()
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    open fun injectViewModel() : CatFactDetailsViewModel =
         (activity as MainActivity).appComponent.catFactDetailsViewModelFactory.create(args.id)
-    }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,10 +56,8 @@ class CatFactDetailsFragment : Fragment() {
         binding.viewModel = this.viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-
-        viewModel.items.observe(viewLifecycleOwner, Observer { fact ->
+        viewModel.catFactDetail.observe(viewLifecycleOwner, Observer { fact ->
             binding.catFact = fact
-
         })
 
 

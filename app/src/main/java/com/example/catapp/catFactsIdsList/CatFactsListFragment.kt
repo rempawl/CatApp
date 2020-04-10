@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,11 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.databinding.CatFactsListFragmentBinding
 import com.example.catapp.di.viewModel
-import com.example.catapp.network.NetworkCallback
 import javax.inject.Inject
 
 
-class CatFactsListFragment : Fragment() {
+open class CatFactsListFragment : Fragment() {
 
     companion object {
         fun newInstance() = CatFactsListFragment()
@@ -28,8 +28,9 @@ class CatFactsListFragment : Fragment() {
 
 
     val viewModel: CatFactsIdsViewModel by viewModel {
-        (activity as MainActivity).appComponent.catFactsIdsViewModel
+        injectViewModel()
     }
+
 
     @Inject
     lateinit var catFactsListAdapter: CatFactsListAdapter
@@ -38,16 +39,15 @@ class CatFactsListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (activity as MainActivity).appComponent.inject(this)
-        Log.d("kruci", "on Attach")
-
+        injectMembers()
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-         binding = CatFactsListFragmentBinding
+        binding = CatFactsListFragmentBinding
             .inflate(inflater, container, false)
 
         setUpBinding()
@@ -63,7 +63,7 @@ class CatFactsListFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.items.observe(viewLifecycleOwner, Observer { factsIdsList ->
+        viewModel.factsIds.observe(viewLifecycleOwner, Observer { factsIdsList ->
             catFactsListAdapter.submitList(factsIdsList)
         })
         viewModel.wasInitialLoadPerformed.observe(viewLifecycleOwner, Observer {
@@ -78,11 +78,13 @@ class CatFactsListFragment : Fragment() {
             viewModel = this@CatFactsListFragment.viewModel
             catFactsList.apply {
                 adapter = catFactsListAdapter
+
                 layoutManager =
                     if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
                         LinearLayoutManager(requireContext())
                     else
                         GridLayoutManager(requireContext(), SPAN_COUNT)
+
 
                 setHasFixedSize(true)
             }
@@ -90,7 +92,13 @@ class CatFactsListFragment : Fragment() {
 
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    open fun injectViewModel() : CatFactsIdsViewModel = (activity as MainActivity).appComponent.catFactsIdsViewModel
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    open fun injectMembers() {
+        (activity as MainActivity).appComponent.inject(this)
+    }
 
 
 }

@@ -1,10 +1,10 @@
 package com.example.catapp.di
 
 
-import com.example.catapp.DefaultSchedulerProvider
-import com.example.catapp.SchedulerProvider
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.data.DefaultCatFactRepository
+import com.example.catapp.utils.DefaultSchedulerProvider
+import com.example.catapp.utils.SchedulerProvider
 import dagger.Binds
 import dagger.Module
 

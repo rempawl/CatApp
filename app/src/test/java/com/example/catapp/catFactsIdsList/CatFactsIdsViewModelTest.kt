@@ -1,11 +1,12 @@
 package com.example.catapp.catFactsIdsList
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.SchedulerProvider
+import com.example.catapp.DefaultErrorModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.getOrAwaitValue
+import com.example.catapp.utils.SchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -13,7 +14,6 @@ import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.ResponseBody
-import org.hamcrest.core.Is
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert.*
 import org.junit.Before
@@ -33,10 +33,11 @@ class CatFactsIdsViewModelTest {
     @MockK
     lateinit var repository: CatFactRepository
 
+
     @MockK
     lateinit var schedulerProvider: SchedulerProvider
 
-    lateinit var viewModel: CatFactsIdsViewModel
+    private lateinit var viewModel: DefaultCatFactsIdsViewModel
 
 
     @Before
@@ -45,9 +46,11 @@ class CatFactsIdsViewModelTest {
         every { schedulerProvider.getIOScheduler() } returns TEST_SCHEDULER
         every { schedulerProvider.getUIScheduler() } returns TEST_SCHEDULER
 
-        viewModel = CatFactsIdsViewModel(
+        viewModel = DefaultCatFactsIdsViewModel(
             catFactRepository = repository,
-            schedulerProvider = schedulerProvider
+            schedulerProvider = schedulerProvider,
+            errorModel = DefaultErrorModel()
+
         )
     }
 
@@ -64,7 +67,7 @@ class CatFactsIdsViewModelTest {
 
         val after = viewModel.wasInitialLoadPerformed.getOrAwaitValue()
         Assertions.assertTrue(after)
-        val data = viewModel.items.getOrAwaitValue()
+        val data = viewModel.factsIds.getOrAwaitValue()
         assertThat(data, `is`(TEST_IDS))
 
 
@@ -72,15 +75,17 @@ class CatFactsIdsViewModelTest {
 
     @Test
     fun `when CatFactApi  returns Single_Error ,Then isNetworkError is set to  true`() {
+
         every { repository.getCatFactsIds() } returns Single.error(HttpException(RESPONSE_ERROR))
 
-        val before = viewModel.isNetworkError.getOrAwaitValue()
+
+        val before = viewModel.errorModel.isErrorActive.getOrAwaitValue()
         assertFalse(before)
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
 
-        val after = viewModel.isNetworkError.getOrAwaitValue()
+        val after = viewModel.errorModel.isErrorActive.getOrAwaitValue()
         assertTrue(after)
     }
 
@@ -91,7 +96,7 @@ class CatFactsIdsViewModelTest {
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
 
-        val data = viewModel.items.getOrAwaitValue()
+        val data = viewModel.factsIds.getOrAwaitValue()
         assertThat(data, `is`(TEST_IDS))
     }
 

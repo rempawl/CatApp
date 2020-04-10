@@ -5,38 +5,45 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.example.catapp.databinding.ActivityMainBinding
 import com.example.catapp.di.AppComponent
 import com.example.catapp.network.NetworkCallback
+import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), NetworkCallback.NetworkChangeListener {
+class MainActivity : AppCompatActivity() {
 
     val appComponent: AppComponent by lazy {
         (application as MyApp).appComponent
     }
     private lateinit var appBarConfiguration: AppBarConfiguration
 
+    @Inject
+    @JvmField
+    var networkConnectionListener: NetworkCallback.NetworkConnectionListener? = null
 
-    private val networkCallback =
-        NetworkCallback(this)
+    @Inject
+    @JvmField
+     var networkCallback : NetworkCallback? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         registerNetworkCallback()
 
         appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_cat_list_fragment))
         val navController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
 
     }
 
@@ -52,7 +59,9 @@ class MainActivity : AppCompatActivity(), NetworkCallback.NetworkChangeListener 
     override fun onDestroy() {
         super.onDestroy()
         getConnectivityManager()
-            .unregisterNetworkCallback(networkCallback)
+            .unregisterNetworkCallback(networkCallback!!)
+        networkConnectionListener = null
+        networkCallback = null
     }
 
 
@@ -62,19 +71,22 @@ class MainActivity : AppCompatActivity(), NetworkCallback.NetworkChangeListener 
     }
 
 
-    override fun onInactive() {
-        Toast.makeText(applicationContext,getText(R.string.offline_info),Toast.LENGTH_LONG)
-            .show()
-
-
-    }
 
     private fun registerNetworkCallback() {
         val networkRequest = createNetworkRequest()
 
+        observeNetworkState()
+
         getConnectivityManager()
-            .registerNetworkCallback(networkRequest, networkCallback)
+            .registerNetworkCallback(networkRequest, networkCallback!!)
     }
+
+    private fun observeNetworkState() {
+        networkConnectionListener!!.isConnectionActive.observe(this, Observer { isActive ->
+            offline_info.visibility = if(!isActive) View.VISIBLE else View.GONE
+        })
+    }
+
 
     private fun getConnectivityManager() =
         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

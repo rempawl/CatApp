@@ -27,12 +27,13 @@
                 android:contentDescription="@string/cat_icon"
                 android:src="@drawable/cat_icon" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
+                app:autoSizeTextType="uniform"
                 android:text="@{@string/cat_fact_id(catFactId._id)}"
-                android:textSize="20sp" />
+                 />
         </LinearLayout>
 
 
