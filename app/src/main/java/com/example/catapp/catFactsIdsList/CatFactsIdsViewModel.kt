@@ -82,6 +82,7 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     private fun onError() {
         stateModel.activateErrorState()
     }
+
     private fun onSuccess(items: List<CatFactId>) {
         _factsIds.postValue(items)
         stateModel.activateSuccessState()
@@ -100,31 +101,44 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
         const val ID_2 = "345"
     }
 
-    private val _fakeFactsIds = MutableLiveData<List<CatFactId>>(
-        listOf(
-            CatFactId(ID_1),
-            CatFactId(ID_2)
-        )
-    )
+    private val _fakeFactsIds = MutableLiveData<List<CatFactId>>()
+
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override val factsIds: LiveData<List<CatFactId>>
         get() = _fakeFactsIds
 
     private val _wasInitialLoadPerformed = MutableLiveData<Boolean>(false)
-    override    val wasInitialLoadPerformed: LiveData<Boolean>
+    override val wasInitialLoadPerformed: LiveData<Boolean>
         get() = _wasInitialLoadPerformed
 
 
     override fun refresh() {
-        CoroutineScope(Dispatchers.Main).launch {
+//        coroutineScope.launch {
             stateModel.activateLoadingState()
-            delay(1000)
+            println("refreshing")
+//            delay(100)
+            stateModel.activateSuccessState()
+//        }
+    }
+
+    override fun init() {
+        coroutineScope.launch {
+            stateModel.activateLoadingState()
+            _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(ID_2)))
+
+            delay(100)
+            _wasInitialLoadPerformed.postValue(true)
             stateModel.activateSuccessState()
         }
     }
 
-    override fun init() {
-        _wasInitialLoadPerformed.postValue(true)
+    fun mockError() {
+        coroutineScope.launch {
+            stateModel.activateLoadingState()
+            delay(100)
+            stateModel.activateErrorState()
+        }
     }
 
 }

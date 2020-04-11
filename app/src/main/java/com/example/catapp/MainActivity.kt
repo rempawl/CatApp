@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.catapp.databinding.ActivityMainBinding
 import com.example.catapp.di.AppComponent
 import com.example.catapp.network.NetworkCallback
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     @JvmField
-     var networkCallback : NetworkCallback? = null
+    var networkCallback: NetworkCallback? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,19 +71,23 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun registerNetworkCallback() {
         val networkRequest = createNetworkRequest()
 
         observeNetworkState()
 
-        getConnectivityManager()
-            .registerNetworkCallback(networkRequest, networkCallback!!)
+        if (networkCallback != null) {
+            getConnectivityManager()
+                .registerNetworkCallback(networkRequest, networkCallback!!)
+
+
+
+        }
     }
 
     private fun observeNetworkState() {
         networkConnectionListener!!.isConnectionActive.observe(this, Observer { isActive ->
-            offline_info.visibility = if(!isActive) View.VISIBLE else View.GONE
+            offline_info.visibility = if (!isActive) View.VISIBLE else View.GONE
         })
     }
 

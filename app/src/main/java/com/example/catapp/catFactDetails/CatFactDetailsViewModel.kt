@@ -1,5 +1,6 @@
 package com.example.catapp.catFactDetails
 
+import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -58,7 +59,6 @@ import io.reactivex.disposables.CompositeDisposable
         disposables.clear()
     }
 
-
     fun refresh() {
         _catFactDetail.value = null
         fetchData()
@@ -71,7 +71,9 @@ import io.reactivex.disposables.CompositeDisposable
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun fetchData() {
-stateModel.activateLoadingState()
+
+        stateModel.activateLoadingState()
+
         val data = getData()
 
         subscribeData(
@@ -86,16 +88,17 @@ stateModel.activateLoadingState()
         ioScheduler: Scheduler,
         uiScheduler: Scheduler
     ) {
-
         val d = data
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
 
             .map { fact -> fact.copy(updatedAt = fact.formatDate()) }
             .subscribe(
-                { d -> onSuccess(d) },
+                { d -> onSuccess(d)
+                },
                 { onError() }
             )
+
 
 
         disposables.add(d)
