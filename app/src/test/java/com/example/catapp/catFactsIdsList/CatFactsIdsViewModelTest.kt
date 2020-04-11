@@ -1,7 +1,7 @@
 package com.example.catapp.catFactsIdsList
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.DefaultErrorModel
+import com.example.catapp.DefaultStateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
@@ -49,7 +49,7 @@ class CatFactsIdsViewModelTest {
         viewModel = DefaultCatFactsIdsViewModel(
             catFactRepository = repository,
             schedulerProvider = schedulerProvider,
-            errorModel = DefaultErrorModel()
+            stateModel = DefaultStateModel()
 
         )
     }
@@ -79,19 +79,21 @@ class CatFactsIdsViewModelTest {
         every { repository.getCatFactsIds() } returns Single.error(HttpException(RESPONSE_ERROR))
 
 
-        val before = viewModel.errorModel.isErrorActive.getOrAwaitValue()
+        val before = viewModel.stateModel.isError.getOrAwaitValue()
         assertFalse(before)
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
 
-        val after = viewModel.errorModel.isErrorActive.getOrAwaitValue()
+        val after = viewModel.stateModel.isError.getOrAwaitValue()
         assertTrue(after)
     }
 
     @Test
     fun `when CatFactApi returns TEST_CAT_FACT, then items value is TEST_CAT_FACT`() {
         every { repository.getCatFactsIds() } returns Single.just(TEST_IDS)
+
+
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)

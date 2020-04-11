@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.catapp.ErrorModel
+import com.example.catapp.StateModel
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.utils.SchedulerProvider
@@ -20,12 +20,11 @@ import javax.inject.Inject
 class DefaultCatFactsIdsViewModel @Inject constructor(
     private val catFactRepository: CatFactRepository,
     private val schedulerProvider: SchedulerProvider,
-    errorModel: ErrorModel
+    stateModel: StateModel
 ) : CatFactsIdsViewModel(
-    errorModel
+    stateModel
 ) {
     private val disposables = CompositeDisposable()
-
     private val _factsIds = MutableLiveData<List<CatFactId>>()
     override val factsIds: LiveData<List<CatFactId>>
         get() = _factsIds
@@ -34,9 +33,6 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     override val wasInitialLoadPerformed: LiveData<Boolean>
         get() = _wasInitialLoadPerformed
 
-    private val _isLoading = MutableLiveData(true)
-    override val isLoading: LiveData<Boolean>
-        get() = _isLoading
 
     override fun onCleared() {
         super.onCleared()
@@ -55,7 +51,8 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun fetchData() {
-        _isLoading.value = true
+        stateModel.activateLoadingState()
+
         val data = getData()
 
         subscribeData(
@@ -72,7 +69,6 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
         val d = data
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-            .doOnTerminate { _isLoading.postValue(false) }
             .subscribe(
                 { d -> onSuccess(d) },
                 { onError() }
@@ -84,11 +80,11 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 
 
     private fun onError() {
-        errorModel.activateError()
+        stateModel.activateErrorState()
     }
     private fun onSuccess(items: List<CatFactId>) {
         _factsIds.postValue(items)
-        errorModel.deactivateError()
+        stateModel.activateSuccessState()
     }
 
     private fun getData(): Single<List<CatFactId>> {
@@ -98,7 +94,7 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 
 }
 
-class FakeFactsIdsViewModel(errorModel: ErrorModel) : CatFactsIdsViewModel(errorModel) {
+class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(stateModel) {
     companion object {
         const val ID_1 = "123"
         const val ID_2 = "345"
@@ -118,15 +114,12 @@ class FakeFactsIdsViewModel(errorModel: ErrorModel) : CatFactsIdsViewModel(error
     override    val wasInitialLoadPerformed: LiveData<Boolean>
         get() = _wasInitialLoadPerformed
 
-    private val _isLoading = MutableLiveData(false)
-    override val isLoading: LiveData<Boolean>
-        get() = _isLoading
 
     override fun refresh() {
         CoroutineScope(Dispatchers.Main).launch {
-            _isLoading.postValue(true)
+            stateModel.activateLoadingState()
             delay(1000)
-            _isLoading.postValue(false)
+            stateModel.activateSuccessState()
         }
     }
 
@@ -137,16 +130,11 @@ class FakeFactsIdsViewModel(errorModel: ErrorModel) : CatFactsIdsViewModel(error
 }
 
 abstract class CatFactsIdsViewModel constructor(
-    val errorModel: ErrorModel
+    val stateModel: StateModel
 ) : ViewModel() {
 
     abstract val factsIds: LiveData<List<CatFactId>>
     abstract val wasInitialLoadPerformed: LiveData<Boolean>
-
-    abstract val isLoading: LiveData<Boolean>
-
-
-
     abstract fun refresh()
 
     abstract fun init()

@@ -1,15 +1,13 @@
 package com.example.catapp.catFactDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.DefaultErrorModel
+import com.example.catapp.DefaultStateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
-import com.example.catapp.data.DefaultCatFactRepository
 import com.example.catapp.data.formatDate
 import com.example.catapp.getOrAwaitValue
 import com.example.catapp.utils.SchedulerProvider
 import io.mockk.MockKAnnotations
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.reactivex.Single
@@ -23,13 +21,9 @@ import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.assertThrows
-import org.mockito.Mock
 import retrofit2.HttpException
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
-import javax.security.auth.DestroyFailedException
 
 @ExperimentalCoroutinesApi
 class CatFactDetailsViewModelTest {
@@ -58,7 +52,7 @@ class CatFactDetailsViewModelTest {
             catFactRepository = repository,
             factId = ID,
             schedulerProvider = schedulerProvider,
-            errorModel = DefaultErrorModel()
+            stateModel = DefaultStateModel()
         )
     }
 
@@ -83,13 +77,13 @@ class CatFactDetailsViewModelTest {
         every { repository.getCatFact(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
 
 
-        val before = viewModel.errorModel.isErrorActive.getOrAwaitValue()
+        val before = viewModel.stateModel.isError.getOrAwaitValue()
         assertFalse(before)
 
         viewModel.fetchData()
         scheduler.advanceTimeBy(100,TimeUnit.MILLISECONDS)
 
-        val after = viewModel.errorModel.isErrorActive.getOrAwaitValue()
+        val after = viewModel.stateModel.isError.getOrAwaitValue()
         assertTrue(after)
     }
 

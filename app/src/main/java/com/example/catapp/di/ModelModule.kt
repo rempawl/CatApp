@@ -1,7 +1,7 @@
 package com.example.catapp.di
 
-import com.example.catapp.DefaultErrorModel
-import com.example.catapp.ErrorModel
+import com.example.catapp.DefaultStateModel
+import com.example.catapp.StateModel
 import dagger.Module
 import dagger.Provides
 
@@ -9,5 +9,5 @@ import dagger.Provides
 object ModelModule {
     @Provides
     @JvmStatic
-    fun provideErrorModel() : ErrorModel = DefaultErrorModel()
+    fun provideErrorModel() : StateModel = DefaultStateModel()
 }

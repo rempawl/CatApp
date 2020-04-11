@@ -28,7 +28,7 @@
             android:orientation="vertical"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
-            app:showWhen="@{viewModel.errorModel.isErrorActive()}">
+            app:showWhen="@{viewModel.stateModel.isError()}">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,7 +74,7 @@
                     android:orientation="vertical"
                     android:visibility="gone"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:showWhen="@{!viewModel.isLoading() &amp;&amp; !viewModel.errorModel.isErrorActive()}">
+                    app:showWhen="@{viewModel.stateModel.isSuccess()}">
 
                     <TextView
                         android:id="@+id/fact_text"
@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    app:isLoading="@{viewModel.isLoading()}"
+                    app:isLoading="@{viewModel.stateModel.isLoading()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"

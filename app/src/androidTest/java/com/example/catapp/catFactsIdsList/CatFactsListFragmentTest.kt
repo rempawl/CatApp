@@ -11,19 +11,14 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
-import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.data.CatFactId
-import com.example.catapp.databinding.CatFactsListFragmentBinding
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -61,8 +56,6 @@ class CatFactsListFragmentTest {
 
     @Test
     fun whenListItemIsClicked_ThenNavigateToCatFactDetails() {
-//         { viewModel.wasInitialLoadPerformed } returns MutableLiveData(false)
-        every { viewModel.isLoading } returns MutableLiveData(false)
 
 
         fragmentScenario.onFragment {fragment ->
