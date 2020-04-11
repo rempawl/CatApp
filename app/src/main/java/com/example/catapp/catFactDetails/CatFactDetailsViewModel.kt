@@ -1,6 +1,5 @@
 package com.example.catapp.catFactDetails
 
-import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,41 +15,26 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 
-//class DefaultCatFactDetailsViewModel @AssistedInject constructor(
-//    catFactRepository: CatFactRepository,
-//    @Assisted factId: String,
-//    schedulerProvider: SchedulerProvider,
-//    errorModel: ErrorModel
-//) : CatFactDetailsViewModel(catFactRepository, factId, schedulerProvider, errorModel) {
-//
-//    @AssistedInject.Factory
-//    interface Factory {
-//        fun create(factId: String): DefaultCatFactDetailsViewModel
-//    }
-//
-//
-//}
-
- class CatFactDetailsViewModel  @AssistedInject constructor(
+class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val catFactRepository: CatFactRepository,
     @Assisted private val factId: String,
     private val schedulerProvider: SchedulerProvider,
-    val stateModel: StateModel
-) : ViewModel() {
+    stateModel: StateModel
+) : CatFactDetailsViewModel(stateModel) {
 
-        @AssistedInject.Factory
+    @AssistedInject.Factory
     interface Factory {
-        fun create(factId: String): CatFactDetailsViewModel
+        fun create(factId: String): DefaultCatFactDetailsViewModel
     }
 
     private val disposables = CompositeDisposable()
 
     private val _catFactDetail = MutableLiveData<CatFact>()
-    val catFactDetail: LiveData<CatFact>
+    override val catFactDetail: LiveData<CatFact>
         get() = _catFactDetail
 
     private val _wasInitialLoadPerformed = MutableLiveData(false)
-    val wasInitialLoadPerformed: LiveData<Boolean>
+    override val wasInitialLoadPerformed: LiveData<Boolean>
         get() = _wasInitialLoadPerformed
 
 
@@ -59,12 +43,12 @@ import io.reactivex.disposables.CompositeDisposable
         disposables.clear()
     }
 
-    fun refresh() {
+    override fun refresh() {
         _catFactDetail.value = null
         fetchData()
     }
 
-    fun init() {
+    override fun init() {
         fetchData()
         _wasInitialLoadPerformed.value = true
     }
@@ -82,7 +66,6 @@ import io.reactivex.disposables.CompositeDisposable
         )
     }
 
-
     private fun subscribeData(
         data: Single<CatFact>,
         ioScheduler: Scheduler,
@@ -94,7 +77,8 @@ import io.reactivex.disposables.CompositeDisposable
 
             .map { fact -> fact.copy(updatedAt = fact.formatDate()) }
             .subscribe(
-                { d -> onSuccess(d)
+                { d ->
+                    onSuccess(d)
                 },
                 { onError() }
             )
@@ -103,7 +87,6 @@ import io.reactivex.disposables.CompositeDisposable
 
         disposables.add(d)
     }
-
 
     private fun onError() {
         stateModel.activateErrorState()
@@ -114,9 +97,48 @@ import io.reactivex.disposables.CompositeDisposable
         stateModel.activateSuccessState()
     }
 
-
     private fun getData(): Single<CatFact> {
         return catFactRepository.getCatFact(factId)
     }
+
+}
+
+class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
+    CatFactDetailsViewModel(stateModel) {
+    companion object {
+        val FAKE_FACT = CatFact("TEXT", "DATE")
+
+    }
+
+    override val catFactDetail: LiveData<CatFact>
+        get() {
+            return MutableLiveData<CatFact>(FAKE_FACT)
+        }
+    private val _wasInitialLoadPerformed = MutableLiveData(false)
+    override val wasInitialLoadPerformed: LiveData<Boolean>
+        get() = _wasInitialLoadPerformed
+
+
+    override fun refresh() {
+
+    }
+
+    override fun init() {
+
+    }
+
+}
+
+abstract class CatFactDetailsViewModel constructor(
+    val stateModel: StateModel
+) : ViewModel() {
+
+    abstract val catFactDetail: LiveData<CatFact>
+    abstract val wasInitialLoadPerformed: LiveData<Boolean>
+
+    abstract fun refresh()
+    abstract fun init()
+
+
 }
 

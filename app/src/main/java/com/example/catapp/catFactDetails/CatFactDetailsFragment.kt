@@ -14,6 +14,16 @@ import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import com.example.catapp.di.viewModel
 import javax.inject.Inject
 
+class FakeCatFactDetailsFragment : CatFactDetailsFragment(){
+    override fun injectViewModel(): CatFactDetailsViewModel {
+        return viewModel
+    }
+
+    companion object{
+        lateinit var viewModel : CatFactDetailsViewModel
+    }
+}
+
 open class CatFactDetailsFragment : Fragment() {
 
     companion object {
@@ -26,10 +36,6 @@ open class CatFactDetailsFragment : Fragment() {
     private val viewModel: CatFactDetailsViewModel by viewModel {
         injectViewModel()
     }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    open fun injectViewModel() : CatFactDetailsViewModel =
-        (activity as MainActivity).appComponent.catFactDetailsViewModelFactory.create(args.id)
 
 
     override fun onCreateView(
@@ -62,5 +68,9 @@ open class CatFactDetailsFragment : Fragment() {
 
 
     }
+
+    protected open fun injectViewModel() : CatFactDetailsViewModel =
+        (activity as MainActivity).appComponent.catFactDetailsViewModelFactory.create(args.id)
+
 
 }

@@ -10,7 +10,7 @@ import org.junit.Assert.*
 import org.junit.Before
 
 class CatFactDetailsFragmentTest{
-    @MockK
+
     lateinit var viewModel : CatFactDetailsViewModel
 
     lateinit var fragmentScenario: FragmentScenario<TestCatFactDetailsFragment>

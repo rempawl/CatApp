@@ -75,7 +75,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
 
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.1'
 
     //moshi
     implementation "com.squareup.moshi:moshi:$moshi_version"

@@ -99,6 +99,8 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
     companion object {
         const val ID_1 = "123"
         const val ID_2 = "345"
+        var SHOULD_MOCK_ERROR = true
+
     }
 
     private val _fakeFactsIds = MutableLiveData<List<CatFactId>>()
@@ -114,31 +116,35 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
 
 
     override fun refresh() {
-//        coroutineScope.launch {
+        coroutineScope.launch {
             stateModel.activateLoadingState()
-            println("refreshing")
-//            delay(100)
+            delay(1000)
             stateModel.activateSuccessState()
-//        }
+        }
     }
 
     override fun init() {
         coroutineScope.launch {
-            stateModel.activateLoadingState()
-            _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(ID_2)))
+            if(SHOULD_MOCK_ERROR) {
+                mockError()
+            }else {
 
-            delay(100)
-            _wasInitialLoadPerformed.postValue(true)
-            stateModel.activateSuccessState()
+                stateModel.activateLoadingState()
+                _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(ID_2)))
+                delay(100)
+                _wasInitialLoadPerformed.postValue(true)
+                stateModel.activateSuccessState()
+            }
         }
     }
 
-    fun mockError() {
-        coroutineScope.launch {
-            stateModel.activateLoadingState()
-            delay(100)
+
+    private fun mockError() {
+//        coroutineScope.launch {
+//            stateModel.activateLoadingState()
+//            delay(100)
             stateModel.activateErrorState()
-        }
+//        }
     }
 
 }
@@ -150,8 +156,8 @@ abstract class CatFactsIdsViewModel constructor(
     abstract val factsIds: LiveData<List<CatFactId>>
     abstract val wasInitialLoadPerformed: LiveData<Boolean>
     abstract fun refresh()
-
     abstract fun init()
+
 
 
 }

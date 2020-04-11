@@ -39,7 +39,7 @@ class CatFactDetailsViewModelTest {
     lateinit var schedulerProvider: SchedulerProvider
 
 
-    lateinit var viewModel: CatFactDetailsViewModel
+    private lateinit var viewModel: DefaultCatFactDetailsViewModel
 
 
     @Before
@@ -52,7 +52,7 @@ class CatFactDetailsViewModelTest {
 
     @Test
     fun `When  init is called _wasInitialLoadPerformed is set to true and data is fetched`() {
-        viewModel = CatFactDetailsViewModel(
+        viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
             schedulerProvider = schedulerProvider,
@@ -74,7 +74,7 @@ class CatFactDetailsViewModelTest {
 
     @Test
     fun `when CatRepository returns error ,Then isError is set to  true`() {
-        viewModel = CatFactDetailsViewModel(
+        viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
             schedulerProvider = schedulerProvider,
@@ -96,7 +96,7 @@ class CatFactDetailsViewModelTest {
 
     @Test
     fun `when CatRepository returns TEST_CAT_FACT, then items value is TEST_CAT_FACT`() {
-        viewModel = CatFactDetailsViewModel(
+        viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
             schedulerProvider = schedulerProvider,
@@ -115,7 +115,7 @@ class CatFactDetailsViewModelTest {
     @Test
     fun `when fetching data is unsuccessful, Then  activateErrorState is called after activateloadingState`() {
         val spyModel = spyk(DefaultStateModel())
-        viewModel = CatFactDetailsViewModel(
+        viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             schedulerProvider = schedulerProvider,
             stateModel = spyModel,
@@ -137,7 +137,7 @@ class CatFactDetailsViewModelTest {
     fun `when fetching data is successful, Then  activate  SuccessState is called after activateloadingState`() {
         val spyModel = spyk(DefaultStateModel())
 
-        viewModel = CatFactDetailsViewModel(
+        viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             schedulerProvider = schedulerProvider,
             stateModel = spyModel,
@@ -163,7 +163,6 @@ class CatFactDetailsViewModelTest {
             Response.error<CatFact>(404, ResponseBody.create(null, "404 File not Found"))
         const val ID = "123"
         private val TEST_SCHEDULER = TestScheduler()
-
 
         val TEST_CAT_FACT = CatFact("test", "09-04-2020")
 

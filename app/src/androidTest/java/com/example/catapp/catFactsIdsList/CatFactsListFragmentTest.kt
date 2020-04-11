@@ -4,20 +4,15 @@ import android.os.Bundle
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.runner.AndroidJUnit4
 import com.example.catapp.DefaultStateModel
-import com.example.catapp.MyApp
 import com.example.catapp.R
-import com.example.catapp.catFactsIdsList.FakeFactsIdsViewModel.Companion.ID_1
 import io.mockk.MockKAnnotations
-import io.mockk.confirmVerified
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
@@ -31,9 +26,8 @@ class CatFactsListFragmentTest {
     @MockK
     lateinit var navController: NavController
 
-    lateinit var viewModel: CatFactsIdsViewModel
+    private lateinit var viewModel: CatFactsIdsViewModel
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactsIdsListFragment>
-//    lateinit var viewModel: CatFactsIdsViewModel
 
     @Before
     fun setUp() {
@@ -69,7 +63,26 @@ todo
 */
 
     @Test
-    fun whenRefreshBtnIsCLicked_ThenRefreshIsCalled(){
+    fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
+
+        FakeFactsIdsViewModel.SHOULD_MOCK_ERROR = true
+        viewModel = FakeFactsIdsViewModel(DefaultStateModel())
+        TestCatFactsIdsListFragment.testViewModel = viewModel
+
+        fragmentScenario =
+            launchFragmentInContainer<TestCatFactsIdsListFragment>(Bundle(), R.style.AppTheme)
+
+        viewModel.init()
+
+        Espresso.onView(withId(R.id.error_view)).check(matches(isDisplayed()))
+
+        verify { viewModel.refresh() }
+
+
+    }
+
+    @Test
+    fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingIconIsDisplayed() {
 
         viewModel = spyk(FakeFactsIdsViewModel(DefaultStateModel()))
         TestCatFactsIdsListFragment.testViewModel = viewModel
@@ -78,8 +91,9 @@ todo
             launchFragmentInContainer<TestCatFactsIdsListFragment>(Bundle(), R.style.AppTheme)
 
         Espresso.onView(withId(R.id.refresh_btn)).perform(click())
+        Espresso.onView(withId(R.id.loading_icon)).check(matches(isDisplayed()))
 
-        verify{ viewModel.refresh()}
+        verify { viewModel.refresh() }
 
 
     }
