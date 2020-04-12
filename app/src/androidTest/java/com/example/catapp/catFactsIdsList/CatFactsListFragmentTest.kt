@@ -76,8 +76,6 @@ todo
 
         Espresso.onView(withId(R.id.error_view)).check(matches(isDisplayed()))
 
-        verify { viewModel.refresh() }
-
 
     }
 

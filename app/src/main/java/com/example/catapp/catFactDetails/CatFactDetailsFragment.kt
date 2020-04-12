@@ -15,6 +15,7 @@ import com.example.catapp.di.viewModel
 import javax.inject.Inject
 
 class FakeCatFactDetailsFragment : CatFactDetailsFragment(){
+
     override fun injectViewModel(): CatFactDetailsViewModel {
         return viewModel
     }

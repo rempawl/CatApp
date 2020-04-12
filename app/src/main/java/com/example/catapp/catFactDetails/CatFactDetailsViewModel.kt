@@ -107,6 +107,7 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
     CatFactDetailsViewModel(stateModel) {
     companion object {
         val FAKE_FACT = CatFact("TEXT", "DATE")
+        var SHOULD_MOCK_ERROR = true
 
     }
 
@@ -121,10 +122,20 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
 
     override fun refresh() {
 
+
     }
 
     override fun init() {
+        if(SHOULD_MOCK_ERROR){
+            mockError()
+        }else{
+            stateModel.activateSuccessState()
+        }
 
+
+    }
+    private fun mockError(){
+        stateModel.activateErrorState()
     }
 
 }

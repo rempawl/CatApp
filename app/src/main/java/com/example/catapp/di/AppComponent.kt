@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.catapp.MainActivity
 import com.example.catapp.catFactDetails.CatFactDetailsFragment
 import com.example.catapp.catFactDetails.CatFactDetailsViewModel
+import com.example.catapp.catFactDetails.DefaultCatFactDetailsViewModel
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
 import com.example.catapp.catFactsIdsList.CatFactsListFragment
 import com.example.catapp.catFactsIdsList.DefaultCatFactsIdsViewModel
@@ -23,7 +24,7 @@ interface AppComponent {
 
 
     val catFactsIdsViewModel: DefaultCatFactsIdsViewModel
-    val catFactDetailsViewModelFactory: CatFactDetailsViewModel.Factory
+    val catFactDetailsViewModelFactory: DefaultCatFactDetailsViewModel.Factory
 
     fun inject(catListFragment: CatFactsListFragment)
     fun inject(mainActivity: MainActivity)

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     @JvmField
-    var networkCallback: NetworkCallback? = null
+    var networkCallback: ConnectivityManager.NetworkCallback? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

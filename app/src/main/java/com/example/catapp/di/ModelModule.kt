@@ -7,6 +7,7 @@ import dagger.Provides
 
 @Module
 object ModelModule {
+
     @Provides
     @JvmStatic
     fun provideErrorModel() : StateModel = DefaultStateModel()

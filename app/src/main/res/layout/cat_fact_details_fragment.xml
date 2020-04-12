@@ -7,7 +7,6 @@
 
 
     <data>
-
         <variable
             name="viewModel"
             type="com.example.catapp.catFactDetails.CatFactDetailsViewModel" />
@@ -22,6 +21,13 @@
         android:layout_height="match_parent"
         tools:context=".catFactDetails.CatFactDetailsFragment">
 
+        <ProgressBar
+            android:id="@+id/loading_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:isLoading="@{viewModel.stateModel.isLoading()}"
+        />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -61,14 +67,8 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
                 <LinearLayout
+                    android:id="@+id/fact_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -97,18 +97,7 @@
                         app:layout_constraintTop_toBottomOf="@id/fact_text" />
                 </LinearLayout>
 
-                <ProgressBar
-                    android:id="@+id/loading_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    app:isLoading="@{viewModel.stateModel.isLoading()}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
     </FrameLayout>

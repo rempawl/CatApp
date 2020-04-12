@@ -95,7 +95,7 @@ class CatFactDetailsViewModelTest {
     }
 
     @Test
-    fun `when CatRepository returns TEST_CAT_FACT, then items value is TEST_CAT_FACT`() {
+    fun `when CatRepository returns TEST_CAT_FACT, then catFactDetails value is TEST_CAT_FACT_MAPPED`() {
         viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,

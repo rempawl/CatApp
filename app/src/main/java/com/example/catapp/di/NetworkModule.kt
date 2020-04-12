@@ -1,5 +1,6 @@
 package com.example.catapp.di
 
+import android.net.ConnectivityManager
 import com.example.catapp.MyApp.Companion.BASE_URL
 import com.example.catapp.network.CatFactsApi
 import com.example.catapp.network.NetworkCallback
@@ -19,36 +20,34 @@ object NetworkModule {
 
     @Provides
     @JvmStatic
+    fun provideNetworkCallback(networkConnectionListener: NetworkCallback.NetworkConnectionListener)
+            : ConnectivityManager.NetworkCallback = NetworkCallback(networkConnectionListener)
+
+    @Provides
+    @JvmStatic
     @Singleton
-    fun provideNetworkChangeListener() : NetworkCallback.NetworkConnectionListener{
-        return DefaultNetworkConnectionListener()
-    }
+    fun provideNetworkChangeListener(): NetworkCallback.NetworkConnectionListener =
+        DefaultNetworkConnectionListener()
 
     @Provides
     @Reusable
     @JvmStatic
-    fun provideCatFactsApi(retrofit: Retrofit): CatFactsApi {
-        return retrofit.create(CatFactsApi::class.java)
-    }
+    fun provideCatFactsApi(retrofit: Retrofit): CatFactsApi =
+        retrofit.create(CatFactsApi::class.java)
 
     @Provides
     @Reusable
     @JvmStatic
-    fun provideMoshi() : Moshi{
-        return Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-    }
+    fun provideMoshi(): Moshi = Moshi.Builder()
+        .add(KotlinJsonAdapterFactory())
+        .build()
 
     @Provides
     @Reusable
     @JvmStatic
-    fun provideRetrofitInterface(moshi : Moshi): Retrofit {
-
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
-    }
+    fun provideRetrofitInterface(moshi: Moshi): Retrofit = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .build()
 }
