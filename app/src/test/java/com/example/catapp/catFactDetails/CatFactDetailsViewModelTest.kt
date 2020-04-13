@@ -1,7 +1,7 @@
 package com.example.catapp.catFactDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.DefaultStateModel
+import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.data.formatDate

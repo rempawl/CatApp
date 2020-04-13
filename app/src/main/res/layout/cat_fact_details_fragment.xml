@@ -21,54 +21,21 @@
         android:layout_height="match_parent"
         tools:context=".catFactDetails.CatFactDetailsFragment">
 
-        <ProgressBar
-            android:id="@+id/loading_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:isLoading="@{viewModel.stateModel.isLoading()}"
-        />
+        <include
+            layout="@layout/loading_layout"
+            bind:stateModel="@{viewModel.stateModel}"
+            />
 
-        <LinearLayout
-            android:id="@+id/error_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:showWhen="@{viewModel.stateModel.isError()}">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/error_msg"
-                android:textSize="30sp"
-                android:layout_gravity="center_horizontal"
-                android:textAlignment="center"
-
-                />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:onClick="@{() -> viewModel.refresh()}"
-                android:text="@string/try_again"
-                android:textAlignment="center"
-                android:textSize="30sp" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/error_image"
-                android:src="@drawable/error_image"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </LinearLayout>
+        <include layout="@layout/error_layout"
+            bind:stateModel="@{viewModel.stateModel}"
+            />
 
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+
                 <LinearLayout
                     android:id="@+id/fact_container"
                     android:layout_width="match_parent"

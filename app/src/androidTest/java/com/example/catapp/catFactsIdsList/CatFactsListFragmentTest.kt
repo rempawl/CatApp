@@ -10,7 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.runner.AndroidJUnit4
-import com.example.catapp.DefaultStateModel
+import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.R
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK

@@ -1,4 +1,4 @@
-package com.example.catapp
+package com.example.catapp.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

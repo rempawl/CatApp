@@ -3,7 +3,6 @@ package com.example.catapp.catFactsIdsList
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +12,14 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
+import com.example.catapp.R
 import com.example.catapp.databinding.CatFactsListFragmentBinding
 import com.example.catapp.di.viewModel
+import com.example.catapp.state.ErrorDialogFragment
 import javax.inject.Inject
 
 
-open class CatFactsListFragment : Fragment() {
+open class CatFactsListFragment : Fragment(), ErrorDialogFragment.OnConfirmClickListener {
 
     companion object {
         fun newInstance() = CatFactsListFragment()
@@ -69,6 +70,15 @@ open class CatFactsListFragment : Fragment() {
         viewModel.wasInitialLoadPerformed.observe(viewLifecycleOwner, Observer {
             if (!it) viewModel.init()
         })
+        viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer {isError ->
+            if(isError) showErrorDialog()
+        })
+    }
+
+    private fun showErrorDialog() {
+        ErrorDialogFragment(getString(R.string.error_msg), getString(R.string.try_again))
+            .show(childFragmentManager, "")
+
     }
 
 
@@ -93,11 +103,16 @@ open class CatFactsListFragment : Fragment() {
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    open fun injectViewModel() : CatFactsIdsViewModel = (activity as MainActivity).appComponent.catFactsIdsViewModel
+    open fun injectViewModel(): CatFactsIdsViewModel =
+        (activity as MainActivity).appComponent.catFactsIdsViewModel
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     open fun injectMembers() {
         (activity as MainActivity).appComponent.inject(this)
+    }
+
+    override fun onConfirm() {
+        viewModel.refresh()
     }
 
 

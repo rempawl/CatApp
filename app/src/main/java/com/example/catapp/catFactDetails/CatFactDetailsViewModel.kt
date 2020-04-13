@@ -4,7 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.catapp.StateModel
+import com.example.catapp.state.StateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.data.formatDate
