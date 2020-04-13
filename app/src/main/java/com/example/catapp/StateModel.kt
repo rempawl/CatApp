@@ -4,15 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import javax.inject.Inject
 
-sealed class State {
-    object Error : State()
-    object Loading : State()
-    object Success : State()
-
-}
 
 abstract class StateModel {
-//    protected var currentState: State = State.Success
 
     abstract val isError: LiveData<Boolean>
     abstract val isLoading : LiveData<Boolean>

@@ -16,6 +16,7 @@ class NetworkCallback @Inject constructor(private val listener: NetworkConnectio
 
 
     override fun onLost(network: Network) {
+        //todo turning off wifi bug
         super.onLost(network)
 //        Log.d("kruci","on lost")
         listener.onInactive()

@@ -7,23 +7,31 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.rule.ActivityTestRule
+import androidx.test.runner.AndroidJUnit4
 import com.example.catapp.DefaultStateModel
+import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.catFactsIdsList.FakeFactsIdsViewModel
 import io.mockk.MockKAnnotations
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class CatFactDetailsFragmentTest {
 
-    lateinit var viewModel: CatFactDetailsViewModel
+    private lateinit var viewModel: FakeCatFactDetailsViewModel
 
-    lateinit var fragmentScenario: FragmentScenario<TestCatFactDetailsFragment>
+    private lateinit var fragmentScenario: FragmentScenario<TestCatFactDetailsFragment>
 
 
 
     @Test
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
+        //it passes but  when runs alone todo
+
         FakeFactsIdsViewModel.SHOULD_MOCK_ERROR = true
 
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
@@ -46,7 +54,7 @@ class CatFactDetailsFragmentTest {
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
         TestCatFactDetailsFragment.testViewModel = viewModel
 
-        fragmentScenario = launchFragmentInContainer(Bundle(), R.style.AppTheme)
+        fragmentScenario = launchFragmentInContainer<TestCatFactDetailsFragment>(Bundle(), R.style.AppTheme)
 
         viewModel.init()
 

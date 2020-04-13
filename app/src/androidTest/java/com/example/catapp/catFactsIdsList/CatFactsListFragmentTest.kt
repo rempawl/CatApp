@@ -29,6 +29,7 @@ class CatFactsListFragmentTest {
     private lateinit var viewModel: CatFactsIdsViewModel
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactsIdsListFragment>
 
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)

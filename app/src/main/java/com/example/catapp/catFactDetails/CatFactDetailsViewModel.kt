@@ -111,10 +111,10 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
 
     }
 
+    private val _catFactDetail = MutableLiveData(FAKE_FACT)
     override val catFactDetail: LiveData<CatFact>
-        get() {
-            return MutableLiveData<CatFact>(FAKE_FACT)
-        }
+        get() = _catFactDetail
+
     private val _wasInitialLoadPerformed = MutableLiveData(false)
     override val wasInitialLoadPerformed: LiveData<Boolean>
         get() = _wasInitialLoadPerformed
@@ -122,19 +122,22 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
 
     override fun refresh() {
 
-
     }
 
     override fun init() {
-        if(SHOULD_MOCK_ERROR){
+        _wasInitialLoadPerformed.postValue(true)
+        stateModel.activateLoadingState()
+
+        if (SHOULD_MOCK_ERROR) {
             mockError()
-        }else{
+        } else {
             stateModel.activateSuccessState()
         }
 
 
     }
-    private fun mockError(){
+
+    private fun mockError() {
         stateModel.activateErrorState()
     }
 

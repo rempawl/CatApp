@@ -14,7 +14,6 @@ class DefaultNetworkConnectionListener @Inject constructor() : NetworkCallback.N
 
     override fun onInactive() {
         _isConnectionActive.postValue(false)
-
     }
 
     override fun onActive() {

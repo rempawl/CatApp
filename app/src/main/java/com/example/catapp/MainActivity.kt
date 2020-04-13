@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +17,17 @@ import com.example.catapp.network.NetworkCallback
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
 
     val appComponent: AppComponent by lazy {
         (application as MyApp).appComponent
     }
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    private val connectivityManager by lazy {
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    }
+
 
     @Inject
     @JvmField
@@ -35,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        appComponent.inject(this)
+        injectMembers()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         registerNetworkCallback()
@@ -45,6 +49,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
 
 
+    }
+
+
+    protected open fun injectMembers() {
+        appComponent.inject(this)
     }
 
 
@@ -58,8 +67,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        getConnectivityManager()
+
+        connectivityManager
             .unregisterNetworkCallback(networkCallback!!)
+
         networkConnectionListener = null
         networkCallback = null
     }
@@ -77,11 +88,8 @@ class MainActivity : AppCompatActivity() {
         observeNetworkState()
 
         if (networkCallback != null) {
-            getConnectivityManager()
+            connectivityManager
                 .registerNetworkCallback(networkRequest, networkCallback!!)
-
-
-
         }
     }
 
@@ -90,10 +98,4 @@ class MainActivity : AppCompatActivity() {
             offline_info.visibility = if (!isActive) View.VISIBLE else View.GONE
         })
     }
-
-
-    private fun getConnectivityManager() =
-        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-
 }
