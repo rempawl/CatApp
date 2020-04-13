@@ -19,13 +19,12 @@
 
         <include
             layout="@layout/loading_layout"
-            app:showWhen="@{viewModel.stateModel.isLoading()}"
+            bind:stateModel="@{viewModel.stateModel}"
             />
 
         <include
             layout="@layout/error_layout"
-            app:showWhen="@{viewModel.stateModel.isError()}"
-
+            bind:stateModel="@{viewModel.stateModel}"
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,48 +32,9 @@
             android:layout_height="match_parent">
 
 
-           <!-- <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/error_view"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:showWhen="@{viewModel.stateModel.isError()}">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/error_msg"
-                    android:textAlignment="center"
-                    android:textSize="30sp"
-
-                    />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:onClick="@{() -> viewModel.refresh()}"
-                    android:text="@string/try_again"
-                    android:textAlignment="center"
-                    android:textSize="30sp" />
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/error_image"
-                    android:src="@drawable/error_image"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </LinearLayout>-->
-
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cat_facts_list"
-                showWhen="@{!viewModel.stateModel.isError()}"
+                showWhen="@{viewModel.stateModel.isSuccess()}"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"

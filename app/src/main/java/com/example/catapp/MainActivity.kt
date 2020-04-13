@@ -42,7 +42,7 @@ open class MainActivity : AppCompatActivity() {
         injectMembers()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        registerNetworkCallback()
+//        registerNetworkCallback()
 
         appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_cat_list_fragment))
         val navController = findNavController(R.id.nav_host_fragment)
@@ -68,8 +68,8 @@ open class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        connectivityManager
-            .unregisterNetworkCallback(networkCallback!!)
+//        connectivityManager
+//            .unregisterNetworkCallback(networkCallback!!)
 
         networkConnectionListener = null
         networkCallback = null
@@ -85,7 +85,7 @@ open class MainActivity : AppCompatActivity() {
     private fun registerNetworkCallback() {
         val networkRequest = createNetworkRequest()
 
-        observeNetworkState()
+//        observeNetworkState()
 
         if (networkCallback != null) {
             connectivityManager
