@@ -95,7 +95,7 @@ class CatFactDetailsViewModelTest {
     }
 
     @Test
-    fun `when CatRepository returns TEST_CAT_FACT, then catFactDetails value is TEST_CAT_FACT_MAPPED`() {
+    fun `when CatRepository returns TEST_CAT_FACT_MAPPED, then catFactDetails value is TEST_CAT_FACT_MAPPED`() {
         viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
@@ -103,7 +103,7 @@ class CatFactDetailsViewModelTest {
             stateModel = DefaultStateModel()
         )
 
-        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT)
+        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT_MAPPED)
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)

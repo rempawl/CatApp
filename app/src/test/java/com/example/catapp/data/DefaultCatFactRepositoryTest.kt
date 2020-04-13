@@ -1,6 +1,7 @@
 package com.example.catapp.data
 
 import com.example.catapp.Utils.TEST_CAT_FACT
+import com.example.catapp.Utils.TEST_CAT_FACT_MAPPED
 import com.example.catapp.Utils.TEST_ID
 import com.example.catapp.Utils.TEST_IDS
 import com.example.catapp.network.CatFactsApi
@@ -26,13 +27,13 @@ class DefaultCatFactRepositoryTest{
     }
 
     @Test
-    fun `when catFactsApi returns Single(TEST_CAT_FACT) then getCatFact returns Single(TEST_CAT_FACT)`(){
+    fun `when catFactsApi returns Single(TEST_CAT_FACT) then getCatFact returns Single(TEST_CAT_FACT_MAPPED)`(){
         every { catFactsApi.getCatFact(TEST_ID)} returns Single.just(TEST_CAT_FACT)
 
         val result =  repository.getCatFact(TEST_ID)
 
         result.test()
-            .assertResult(TEST_CAT_FACT)
+            .assertResult(TEST_CAT_FACT_MAPPED)
 
     }
 

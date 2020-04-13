@@ -74,8 +74,6 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
         val d = data
             .subscribeOn(ioScheduler)
             .observeOn(uiScheduler)
-
-            .map { fact -> fact.copy(updatedAt = fact.formatDate()) }
             .subscribe(
                 { d ->
                     onSuccess(d)

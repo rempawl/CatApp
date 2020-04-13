@@ -19,12 +19,13 @@
 
         <include
             layout="@layout/loading_layout"
-            bind:stateModel="@{viewModel.stateModel}"
+            app:showWhen="@{viewModel.stateModel.isLoading()}"
             />
 
         <include
             layout="@layout/error_layout"
-            bind:stateModel="@{viewModel.stateModel}"
+            app:showWhen="@{viewModel.stateModel.isError()}"
+
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout

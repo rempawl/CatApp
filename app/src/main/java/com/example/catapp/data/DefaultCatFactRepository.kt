@@ -15,6 +15,7 @@ class DefaultCatFactRepository @Inject constructor(private val catFactsApi: CatF
 
     override fun getCatFact(id: String): Single<CatFact> {
         return catFactsApi.getCatFact(id)
+            .map { fact -> fact.copy(updatedAt = fact.formatDate()) }
     }
 
 }
