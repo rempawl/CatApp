@@ -25,7 +25,7 @@ class CatFactDetailsFragmentTest {
 
     @Test
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
-        //it passes but  when runs alone todo
+        // todo
 
         FakeFactsIdsViewModel.SHOULD_MOCK_ERROR = true
 
@@ -35,7 +35,6 @@ class CatFactDetailsFragmentTest {
         fragmentScenario =
             launchFragmentInContainer<TestCatFactDetailsFragment>(Bundle(), R.style.AppTheme)
 
-        viewModel.init()
 
         Espresso
             .onView(withId(R.id.error_view))
@@ -51,7 +50,6 @@ class CatFactDetailsFragmentTest {
 
         fragmentScenario = launchFragmentInContainer<TestCatFactDetailsFragment>(Bundle(), R.style.AppTheme)
 
-        viewModel.init()
 
         Espresso
             .onView(withId(R.id.fact_container))

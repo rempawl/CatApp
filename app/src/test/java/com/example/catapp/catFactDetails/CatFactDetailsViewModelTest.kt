@@ -50,30 +50,11 @@ class CatFactDetailsViewModelTest {
 
     }
 
-    @Test
-    fun `When  init is called _wasInitialLoadPerformed is set to true and data is fetched`() {
-        viewModel = DefaultCatFactDetailsViewModel(
-            catFactRepository = repository,
-            factId = ID,
-            schedulerProvider = schedulerProvider,
-            stateModel = DefaultStateModel()
-        )
-
-        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT)
-
-
-        val before = viewModel.wasInitialLoadPerformed.getOrAwaitValue()
-        Assertions.assertFalse(before)
-
-        viewModel.init()
-
-        val after = viewModel.wasInitialLoadPerformed.getOrAwaitValue()
-        Assertions.assertTrue(after)
-
-    }
 
     @Test
     fun `when CatRepository returns error ,Then isError is set to  true`() {
+
+        every { repository.getCatFact(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
         viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
@@ -81,7 +62,6 @@ class CatFactDetailsViewModelTest {
             stateModel = DefaultStateModel()
         )
 
-        every { repository.getCatFact(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
 
 
         val before = viewModel.stateModel.isError.getOrAwaitValue()
@@ -96,6 +76,7 @@ class CatFactDetailsViewModelTest {
 
     @Test
     fun `when CatRepository returns TEST_CAT_FACT_MAPPED, then catFactDetails value is TEST_CAT_FACT_MAPPED`() {
+        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT_MAPPED)
         viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
             factId = ID,
@@ -103,7 +84,6 @@ class CatFactDetailsViewModelTest {
             stateModel = DefaultStateModel()
         )
 
-        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT_MAPPED)
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
@@ -114,6 +94,7 @@ class CatFactDetailsViewModelTest {
 
     @Test
     fun `when fetching data is unsuccessful, Then  activateErrorState is called after activateloadingState`() {
+        every { repository.getCatFact(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
         val spyModel = spyk(DefaultStateModel())
         viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
@@ -122,7 +103,6 @@ class CatFactDetailsViewModelTest {
             factId = ID
 
         )
-        every { repository.getCatFact(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
@@ -135,7 +115,9 @@ class CatFactDetailsViewModelTest {
 
     @Test
     fun `when fetching data is successful, Then  activate  SuccessState is called after activateloadingState`() {
+        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT)
         val spyModel = spyk(DefaultStateModel())
+
 
         viewModel = DefaultCatFactDetailsViewModel(
             catFactRepository = repository,
@@ -144,9 +126,8 @@ class CatFactDetailsViewModelTest {
             factId = ID
 
         )
-        every { repository.getCatFact(ID) } returns Single.just(TEST_CAT_FACT)
 
-        viewModel.fetchData()
+//        viewModel.fetchData()
 
         TEST_SCHEDULER.advanceTimeBy(200, TimeUnit.MILLISECONDS)
 

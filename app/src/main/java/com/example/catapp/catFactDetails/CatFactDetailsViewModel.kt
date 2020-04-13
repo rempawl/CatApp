@@ -33,9 +33,6 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     override val catFactDetail: LiveData<CatFact>
         get() = _catFactDetail
 
-    private val _wasInitialLoadPerformed = MutableLiveData(false)
-    override val wasInitialLoadPerformed: LiveData<Boolean>
-        get() = _wasInitialLoadPerformed
 
 
     override fun onCleared() {
@@ -48,9 +45,8 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
         fetchData()
     }
 
-    override fun init() {
+    init {
         fetchData()
-        _wasInitialLoadPerformed.value = true
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -113,17 +109,16 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
     override val catFactDetail: LiveData<CatFact>
         get() = _catFactDetail
 
-    private val _wasInitialLoadPerformed = MutableLiveData(false)
-    override val wasInitialLoadPerformed: LiveData<Boolean>
-        get() = _wasInitialLoadPerformed
+//    private val _wasInitialLoadPerformed = MutableLiveData(false)
+//    override val wasInitialLoadPerformed: LiveData<Boolean>
+//        get() = _wasInitialLoadPerformed
 
 
     override fun refresh() {
 
     }
 
-    override fun init() {
-        _wasInitialLoadPerformed.postValue(true)
+    init {
         stateModel.activateLoadingState()
 
         if (SHOULD_MOCK_ERROR) {
@@ -146,10 +141,8 @@ abstract class CatFactDetailsViewModel constructor(
 ) : ViewModel() {
 
     abstract val catFactDetail: LiveData<CatFact>
-    abstract val wasInitialLoadPerformed: LiveData<Boolean>
 
     abstract fun refresh()
-    abstract fun init()
 
 
 }

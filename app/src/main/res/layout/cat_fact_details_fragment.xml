@@ -50,7 +50,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:text="@{@string/fact_text(catFact.text)}"
+                        android:text="@{@string/fact_text(viewModel.catFactDetail.text)}"
                         android:textAlignment="center"
                         android:textSize="25sp"
                          />
@@ -60,7 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
-                        android:text="@{@string/update_date(catFact.updatedAt)}"
+                        android:text="@{@string/update_date(viewModel.catFactDetail.updatedAt)}"
                         android:textAlignment="center"
                         android:textSize="25sp"
                         />

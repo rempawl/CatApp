@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.runner.AndroidJUnit4
 import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.R
+import com.example.catapp.catFactsIdsList.FakeFactsIdsViewModel.Companion.SHOULD_MOCK_ERROR
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
@@ -73,15 +74,17 @@ todo
         fragmentScenario =
             launchFragmentInContainer<TestCatFactsIdsListFragment>(Bundle(), R.style.AppTheme)
 
-        viewModel.init()
 
-        Espresso.onView(withId(R.id.error_view)).check(matches(isDisplayed()))
+        Espresso
+            .onView(withId(R.id.error_view))
+            .check(matches(isDisplayed()))
 
 
     }
 
     @Test
     fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingIconIsDisplayed() {
+        SHOULD_MOCK_ERROR = false
 
         viewModel = spyk(FakeFactsIdsViewModel(DefaultStateModel()))
         TestCatFactsIdsListFragment.testViewModel = viewModel

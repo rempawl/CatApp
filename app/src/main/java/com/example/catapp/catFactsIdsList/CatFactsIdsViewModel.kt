@@ -29,9 +29,6 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     override val factsIds: LiveData<List<CatFactId>>
         get() = _factsIds
 
-    private val _wasInitialLoadPerformed = MutableLiveData(false)
-    override val wasInitialLoadPerformed: LiveData<Boolean>
-        get() = _wasInitialLoadPerformed
 
 
     override fun onCleared() {
@@ -44,9 +41,8 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
         fetchData()
     }
 
-    override fun init() {
+    init {
         fetchData()
-        _wasInitialLoadPerformed.value = true
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -110,9 +106,6 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
     override val factsIds: LiveData<List<CatFactId>>
         get() = _fakeFactsIds
 
-    private val _wasInitialLoadPerformed = MutableLiveData<Boolean>(false)
-    override val wasInitialLoadPerformed: LiveData<Boolean>
-        get() = _wasInitialLoadPerformed
 
 
     override fun refresh() {
@@ -123,28 +116,25 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
         }
     }
 
-    override fun init() {
+    init {
         coroutineScope.launch {
             if(SHOULD_MOCK_ERROR) {
                 mockError()
             }else {
 
                 stateModel.activateLoadingState()
+                delay(1000)
+
                 _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(ID_2)))
-                delay(100)
-                _wasInitialLoadPerformed.postValue(true)
                 stateModel.activateSuccessState()
             }
+
         }
     }
 
 
     private fun mockError() {
-//        coroutineScope.launch {
-//            stateModel.activateLoadingState()
-//            delay(100)
             stateModel.activateErrorState()
-//        }
     }
 
 }
@@ -154,9 +144,7 @@ abstract class CatFactsIdsViewModel constructor(
 ) : ViewModel() {
 
     abstract val factsIds: LiveData<List<CatFactId>>
-    abstract val wasInitialLoadPerformed: LiveData<Boolean>
     abstract fun refresh()
-    abstract fun init()
 
 
 

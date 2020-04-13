@@ -61,9 +61,6 @@ open class CatFactDetailsFragment : Fragment(),ErrorDialogFragment.OnConfirmClic
         viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer { isError ->
             if (isError) showErrorDialog()
         })
-        viewModel.wasInitialLoadPerformed.observe(viewLifecycleOwner, Observer {
-            if (!it) viewModel.init()
-        })
     }
 
     private fun showErrorDialog() {
@@ -75,9 +72,11 @@ open class CatFactDetailsFragment : Fragment(),ErrorDialogFragment.OnConfirmClic
         binding.viewModel = this.viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+/*
         viewModel.catFactDetail.observe(viewLifecycleOwner, Observer { fact ->
             binding.catFact = fact
         })
+*/
 
 
     }

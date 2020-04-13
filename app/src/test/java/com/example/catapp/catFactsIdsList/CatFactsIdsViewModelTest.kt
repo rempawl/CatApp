@@ -1,11 +1,11 @@
 package com.example.catapp.catFactsIdsList
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.getOrAwaitValue
+import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.utils.SchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -14,14 +14,12 @@ import io.mockk.spyk
 import io.mockk.verify
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.ResponseBody
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import retrofit2.HttpException
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
@@ -50,42 +48,17 @@ class CatFactsIdsViewModelTest {
 
     }
 
-    @ExperimentalCoroutinesApi
-    @Test
-    fun `When  init is called _wasInitialLoadPerformed is set to true and data is fetched`() {
-        viewModel = DefaultCatFactsIdsViewModel(
-            catFactRepository = repository,
-            schedulerProvider = schedulerProvider,
-            stateModel = DefaultStateModel()
-        )
-
-
-        every { repository.getCatFactsIds() } returns Single.just(TEST_IDS)
-
-        val before = viewModel.wasInitialLoadPerformed.getOrAwaitValue()
-        Assertions.assertFalse(before)
-
-        viewModel.init()
-        TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
-
-        val after = viewModel.wasInitialLoadPerformed.getOrAwaitValue()
-        Assertions.assertTrue(after)
-        val data = viewModel.factsIds.getOrAwaitValue()
-        assertThat(data, `is`(TEST_IDS))
-
-
-    }
 
     @Test
-    fun `when CatFactApi  returns Single_Error ,Then isNetworkError is set to  true`() {
-        viewModel = DefaultCatFactsIdsViewModel(
-            catFactRepository = repository,
-            schedulerProvider = schedulerProvider,
-            stateModel = DefaultStateModel()
-
-        )
-
+    fun `when repository  returns Single_Error ,Then isNetworkError is set to  true`() {
         every { repository.getCatFactsIds() } returns Single.error(HttpException(RESPONSE_ERROR))
+
+        viewModel = DefaultCatFactsIdsViewModel(
+            catFactRepository = repository,
+            schedulerProvider = schedulerProvider,
+            stateModel = DefaultStateModel()
+
+        )
 
 
         val before = viewModel.stateModel.isError.getOrAwaitValue()
@@ -99,14 +72,15 @@ class CatFactsIdsViewModelTest {
     }
 
     @Test
-    fun `when CatFactApi returns TEST_CAT_FACT, items value is TEST_CAT_FACT`() {
+    fun `when repository returns TEST_IDS, items value is TEST_IDS`() {
+        every { repository.getCatFactsIds() } returns Single.just(TEST_IDS)
+
         viewModel = DefaultCatFactsIdsViewModel(
             catFactRepository = repository,
             schedulerProvider = schedulerProvider,
             stateModel = DefaultStateModel()
 
         )
-        every { repository.getCatFactsIds() } returns Single.just(TEST_IDS)
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
@@ -117,6 +91,7 @@ class CatFactsIdsViewModelTest {
 
     @Test
     fun `when fetching data is unsuccessful, Then  activateErrorState is called after activateloadingState`() {
+        every { repository.getCatFactsIds() } returns Single.error(HttpException(RESPONSE_ERROR))
         val spyModel = spyk(DefaultStateModel())
         viewModel = DefaultCatFactsIdsViewModel(
             catFactRepository = repository,
@@ -124,7 +99,6 @@ class CatFactsIdsViewModelTest {
             stateModel = spyModel
 
         )
-        every { repository.getCatFactsIds() } returns Single.error(HttpException(RESPONSE_ERROR))
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
@@ -137,6 +111,7 @@ class CatFactsIdsViewModelTest {
 
     @Test
     fun `when fetching data is successful, Then  activate  SuccessState is called after activateloadingState`() {
+        every { repository.getCatFactsIds() } returns Single.just(TEST_IDS)
         val spyModel = spyk(DefaultStateModel())
         viewModel = DefaultCatFactsIdsViewModel(
             catFactRepository = repository,
@@ -144,7 +119,6 @@ class CatFactsIdsViewModelTest {
             stateModel = spyModel
 
         )
-        every { repository.getCatFactsIds() } returns Single.just(TEST_IDS)
 
         viewModel.fetchData()
         TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
@@ -153,8 +127,6 @@ class CatFactsIdsViewModelTest {
             spyModel.activateSuccessState()
         }
     }
-
-
 
 
     companion object {
