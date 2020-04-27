@@ -16,7 +16,7 @@ object Utils {
     const val TEST_ID = "123"
 
     val TEST_CAT_FACT = CatFact("test", "09-04-2020")
-    val TEST_CAT_FACT_MAPPED = TEST_CAT_FACT.copy(updatedAt = CatFactDetailsViewModelTest.TEST_CAT_FACT.formatDate())
+    val TEST_CAT_FACT_MAPPED = TEST_CAT_FACT.copy(updatedAt = TEST_CAT_FACT.formatDate())
 
 
 

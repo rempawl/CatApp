@@ -67,11 +67,6 @@ open class CatFactsListFragment : Fragment(), ErrorDialogFragment.OnConfirmClick
         viewModel.factsIds.observe(viewLifecycleOwner, Observer { factsIdsList ->
             catFactsListAdapter.submitList(factsIdsList)
         })
-/*
-        viewModel.wasInitialLoadPerformed.observe(viewLifecycleOwner, Observer {
-            if (!it) viewModel.init()
-        })
-*/
         viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer {isError ->
             if(isError) showErrorDialog()
         })

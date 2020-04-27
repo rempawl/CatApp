@@ -19,7 +19,7 @@ class ErrorDialogFragment(
         val frag = parentFragment ?: throw IllegalStateException("no parent fragment")
         when (frag) {
             is OnConfirmClickListener -> listener = frag
-            else -> throw NotImplementedError("Parent fragment should implement OnConfirmSelectedListener interface")
+            else -> throw NotImplementedError("Parent fragment should implement OnConfirmClickListener interface")
         }
     }
 

@@ -7,12 +7,11 @@ import androidx.navigation.NavController
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.runner.AndroidJUnit4
-import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.R
-import com.example.catapp.catFactsIdsList.FakeFactsIdsViewModel.Companion.SHOULD_MOCK_ERROR
+import com.example.catapp.state.DefaultStateModel
+import com.example.catapp.catFactsIdsList.FakeFactsIdsViewModel.Companion.shouldMockError
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
@@ -67,16 +66,15 @@ todo
     @Test
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
 
-        FakeFactsIdsViewModel.SHOULD_MOCK_ERROR = true
+        shouldMockError = true
         viewModel = FakeFactsIdsViewModel(DefaultStateModel())
         TestCatFactsIdsListFragment.testViewModel = viewModel
 
         fragmentScenario =
             launchFragmentInContainer<TestCatFactsIdsListFragment>(Bundle(), R.style.AppTheme)
 
-
         Espresso
-            .onView(withId(R.id.error_view))
+            .onView(withText(R.string.error_msg))
             .check(matches(isDisplayed()))
 
 
@@ -84,8 +82,7 @@ todo
 
     @Test
     fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingIconIsDisplayed() {
-        SHOULD_MOCK_ERROR = false
-
+        shouldMockError = false
         viewModel = spyk(FakeFactsIdsViewModel(DefaultStateModel()))
         TestCatFactsIdsListFragment.testViewModel = viewModel
 

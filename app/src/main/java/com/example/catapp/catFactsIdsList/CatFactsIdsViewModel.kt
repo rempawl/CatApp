@@ -8,7 +8,7 @@ import com.example.catapp.state.StateModel
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.utils.SchedulerProvider
-import io.reactivex.Scheduler
+import com.example.catapp.utils.SingleSubscriber
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
@@ -21,9 +21,7 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     private val catFactRepository: CatFactRepository,
     private val schedulerProvider: SchedulerProvider,
     stateModel: StateModel
-) : CatFactsIdsViewModel(
-    stateModel
-) {
+) : CatFactsIdsViewModel(stateModel), SingleSubscriber<List<CatFactId>> {
     private val disposables = CompositeDisposable()
     private val _factsIds = MutableLiveData<List<CatFactId>>()
     override val factsIds: LiveData<List<CatFactId>>
@@ -46,17 +44,15 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun fetchData() {
+     fun fetchData() {
         stateModel.activateLoadingState()
 
         val data = getData()
 
-        subscribeData(
-            data, ioScheduler = schedulerProvider.getIOScheduler(),
-            uiScheduler = schedulerProvider.getUIScheduler()
-        )
+        disposables.add(subscribeData(data,schedulerProvider))
     }
 
+/*
     private fun subscribeData(
         data: Single<List<CatFactId>>,
         ioScheduler: Scheduler,
@@ -73,14 +69,15 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 
         disposables.add(d)
     }
+*/
 
 
-    private fun onError() {
+     override fun onError(e : Throwable) {
         stateModel.activateErrorState()
     }
 
-    private fun onSuccess(items: List<CatFactId>) {
-        _factsIds.postValue(items)
+     override fun onSuccess(data: List<CatFactId>) {
+        _factsIds.value = (data)
         stateModel.activateSuccessState()
     }
 
@@ -95,7 +92,7 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
     companion object {
         const val ID_1 = "123"
         const val ID_2 = "345"
-        var SHOULD_MOCK_ERROR = true
+        var shouldMockError = true
 
     }
 
@@ -118,13 +115,12 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
 
     init {
         coroutineScope.launch {
-            if(SHOULD_MOCK_ERROR) {
+            if(shouldMockError) {
                 mockError()
             }else {
 
                 stateModel.activateLoadingState()
                 delay(1000)
-
                 _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(ID_2)))
                 stateModel.activateSuccessState()
             }

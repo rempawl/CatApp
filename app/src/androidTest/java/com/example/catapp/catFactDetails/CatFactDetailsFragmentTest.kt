@@ -5,8 +5,7 @@ import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.runner.AndroidJUnit4
 import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.R
@@ -25,9 +24,8 @@ class CatFactDetailsFragmentTest {
 
     @Test
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
-        // todo
 
-        FakeFactsIdsViewModel.SHOULD_MOCK_ERROR = true
+        FakeFactsIdsViewModel.shouldMockError = true
 
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
         TestCatFactDetailsFragment.testViewModel = viewModel
@@ -37,14 +35,14 @@ class CatFactDetailsFragmentTest {
 
 
         Espresso
-            .onView(withId(R.id.error_view))
+            .onView(withText(R.string.error_msg))
             .check(matches(isDisplayed()))
 
     }
 
     @Test
     fun whenDataIsSuccessfullyFetched_ThenFactContainerIsDisplayed() {
-        FakeCatFactDetailsViewModel.SHOULD_MOCK_ERROR = false
+        FakeCatFactDetailsViewModel.shouldMockError = false
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
         TestCatFactDetailsFragment.testViewModel = viewModel
 

@@ -4,23 +4,24 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.catapp.state.StateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
-import com.example.catapp.data.formatDate
+import com.example.catapp.state.StateModel
 import com.example.catapp.utils.SchedulerProvider
+import com.example.catapp.utils.SingleSubscriber
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+
 
 class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val catFactRepository: CatFactRepository,
     @Assisted private val factId: String,
     private val schedulerProvider: SchedulerProvider,
     stateModel: StateModel
-) : CatFactDetailsViewModel(stateModel) {
+) : CatFactDetailsViewModel(stateModel), SingleSubscriber<CatFact> {
 
     @AssistedInject.Factory
     interface Factory {
@@ -32,7 +33,6 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val _catFactDetail = MutableLiveData<CatFact>()
     override val catFactDetail: LiveData<CatFact>
         get() = _catFactDetail
-
 
 
     override fun onCleared() {
@@ -50,18 +50,16 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun fetchData() {
-
+     fun fetchData() {
         stateModel.activateLoadingState()
 
         val data = getData()
 
-        subscribeData(
-            data, ioScheduler = schedulerProvider.getIOScheduler(),
-            uiScheduler = schedulerProvider.getUIScheduler()
-        )
+        disposables.add(subscribeData(data, schedulerProvider))
+
     }
 
+/*
     private fun subscribeData(
         data: Single<CatFact>,
         ioScheduler: Scheduler,
@@ -77,17 +75,16 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
                 { onError() }
             )
 
-
-
         disposables.add(d)
     }
+*/
 
-    private fun onError() {
+    override fun onError(e: Throwable) {
         stateModel.activateErrorState()
     }
 
-    private fun onSuccess(items: CatFact) {
-        _catFactDetail.postValue(items)
+    override fun onSuccess(data: CatFact) {
+        _catFactDetail.value = data
         stateModel.activateSuccessState()
     }
 
@@ -95,13 +92,14 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
         return catFactRepository.getCatFact(factId)
     }
 
+
 }
 
 class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
     CatFactDetailsViewModel(stateModel) {
     companion object {
         val FAKE_FACT = CatFact("TEXT", "DATE")
-        var SHOULD_MOCK_ERROR = true
+        var shouldMockError = true
 
     }
 
@@ -109,21 +107,18 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
     override val catFactDetail: LiveData<CatFact>
         get() = _catFactDetail
 
-//    private val _wasInitialLoadPerformed = MutableLiveData(false)
-//    override val wasInitialLoadPerformed: LiveData<Boolean>
-//        get() = _wasInitialLoadPerformed
-
 
     override fun refresh() {
 
     }
 
     init {
-        stateModel.activateLoadingState()
 
-        if (SHOULD_MOCK_ERROR) {
+        if (shouldMockError) {
             mockError()
         } else {
+            stateModel.activateLoadingState()
+
             stateModel.activateSuccessState()
         }
 

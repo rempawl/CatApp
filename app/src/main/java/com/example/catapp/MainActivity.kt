@@ -22,6 +22,7 @@ open class MainActivity : AppCompatActivity() {
     val appComponent: AppComponent by lazy {
         (application as MyApp).appComponent
     }
+    
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val connectivityManager by lazy {
