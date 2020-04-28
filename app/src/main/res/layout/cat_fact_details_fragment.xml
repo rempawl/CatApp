@@ -23,12 +23,14 @@
 
         <include
             layout="@layout/loading_layout"
-            bind:stateModel="@{viewModel.stateModel}"
+            android:id="@+id/loading"
+            app:showWhen="@{viewModel.stateModel.isLoading()}"
             />
 
 
         <include layout="@layout/error_layout"
-            bind:stateModel="@{viewModel.stateModel}"
+            android:id="@+id/error_view"
+            app:showWhen="@{viewModel.stateModel.isError()}"
             />
 
 

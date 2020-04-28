@@ -16,7 +16,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CatFactDetailsFragmentTest {
 
-    private lateinit var viewModel: FakeCatFactDetailsViewModel
+    private lateinit var viewModel: CatFactDetailsViewModel
 
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactDetailsFragment>
 
@@ -25,7 +25,7 @@ class CatFactDetailsFragmentTest {
     @Test
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
 
-        FakeFactsIdsViewModel.shouldMockError = true
+        FakeCatFactDetailsViewModel.shouldMockError = true
 
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
         TestCatFactDetailsFragment.testViewModel = viewModel
@@ -37,11 +37,12 @@ class CatFactDetailsFragmentTest {
         Espresso
             .onView(withText(R.string.error_msg))
             .check(matches(isDisplayed()))
-
     }
 
     @Test
     fun whenDataIsSuccessfullyFetched_ThenFactContainerIsDisplayed() {
+        //todo
+
         FakeCatFactDetailsViewModel.shouldMockError = false
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
         TestCatFactDetailsFragment.testViewModel = viewModel
@@ -51,6 +52,7 @@ class CatFactDetailsFragmentTest {
 
         Espresso
             .onView(withId(R.id.fact_container))
+
             .check(matches(isDisplayed()))
 
     }

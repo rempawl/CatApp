@@ -81,7 +81,7 @@ todo
     }
 
     @Test
-    fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingIconIsDisplayed() {
+    fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingLayoutIsDisplayed() {
         shouldMockError = false
         viewModel = spyk(FakeFactsIdsViewModel(DefaultStateModel()))
         TestCatFactsIdsListFragment.testViewModel = viewModel
@@ -90,7 +90,7 @@ todo
             launchFragmentInContainer<TestCatFactsIdsListFragment>(Bundle(), R.style.AppTheme)
 
         Espresso.onView(withId(R.id.refresh_btn)).perform(click())
-        Espresso.onView(withId(R.id.loading_icon)).check(matches(isDisplayed()))
+        Espresso.onView(withId(R.id.loading)).check(matches(isDisplayed()))
 
         verify { viewModel.refresh() }
 

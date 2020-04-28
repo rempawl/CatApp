@@ -127,8 +127,6 @@ class CatFactDetailsViewModelTest {
 
         )
 
-//        viewModel.fetchData()
-
         TEST_SCHEDULER.advanceTimeBy(200, TimeUnit.MILLISECONDS)
 
         verify {

@@ -13,7 +13,8 @@ interface SingleSubscriber<R> : Subscriber<Single<R>> {
         return data
             .subscribeOn(schedulerProvider.getIOScheduler())
             .observeOn(schedulerProvider.getUIScheduler())
-            .subscribe({  onSuccess(it) },
+            .subscribe(
+                { onSuccess(it) },
                 { e -> onError(e) }
             )
     }

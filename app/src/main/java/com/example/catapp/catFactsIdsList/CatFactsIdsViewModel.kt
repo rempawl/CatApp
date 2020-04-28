@@ -22,7 +22,9 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     private val schedulerProvider: SchedulerProvider,
     stateModel: StateModel
 ) : CatFactsIdsViewModel(stateModel), SingleSubscriber<List<CatFactId>> {
+
     private val disposables = CompositeDisposable()
+
     private val _factsIds = MutableLiveData<List<CatFactId>>()
     override val factsIds: LiveData<List<CatFactId>>
         get() = _factsIds
@@ -52,24 +54,6 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
         disposables.add(subscribeData(data,schedulerProvider))
     }
 
-/*
-    private fun subscribeData(
-        data: Single<List<CatFactId>>,
-        ioScheduler: Scheduler,
-        uiScheduler: Scheduler
-    ) {
-        val d = data
-            .subscribeOn(ioScheduler)
-            .observeOn(uiScheduler)
-            .subscribe(
-                { d -> onSuccess(d) },
-                { onError() }
-            )
-
-
-        disposables.add(d)
-    }
-*/
 
 
      override fun onError(e : Throwable) {
@@ -93,7 +77,6 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
         const val ID_1 = "123"
         const val ID_2 = "345"
         var shouldMockError = true
-
     }
 
     private val _fakeFactsIds = MutableLiveData<List<CatFactId>>()
@@ -118,7 +101,6 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
             if(shouldMockError) {
                 mockError()
             }else {
-
                 stateModel.activateLoadingState()
                 delay(1000)
                 _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(ID_2)))
@@ -127,7 +109,6 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
 
         }
     }
-
 
     private fun mockError() {
             stateModel.activateErrorState()
