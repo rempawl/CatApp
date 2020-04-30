@@ -1,16 +1,10 @@
 package com.example.catapp.di
 
-import android.content.Context
 import com.example.catapp.MainActivity
-import com.example.catapp.catFactDetails.CatFactDetailsFragment
-import com.example.catapp.catFactDetails.CatFactDetailsViewModel
 import com.example.catapp.catFactDetails.DefaultCatFactDetailsViewModel
-import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
-import com.example.catapp.catFactsIdsList.CatFactsListFragment
+import com.example.catapp.catFactsIdsList.CatFactsIdsFragment
 import com.example.catapp.catFactsIdsList.DefaultCatFactsIdsViewModel
-import dagger.BindsInstance
 import dagger.Component
-import dagger.Provides
 import javax.inject.Singleton
 
 @Singleton
@@ -22,10 +16,9 @@ interface AppComponent {
         fun create(): AppComponent
     }
 
-
     val catFactsIdsViewModel: DefaultCatFactsIdsViewModel
     val catFactDetailsViewModelFactory: DefaultCatFactDetailsViewModel.Factory
 
-    fun inject(catListFragment: CatFactsListFragment)
+    fun inject(catIdsFragment: CatFactsIdsFragment)
     fun inject(mainActivity: MainActivity)
 }

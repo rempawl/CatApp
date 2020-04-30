@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/navigation_cat_list_fragment"
-        android:name="com.example.catapp.catFactsIdsList.CatFactsListFragment"
+        android:name="com.example.catapp.catFactsIdsList.CatFactsIdsFragment"
         android:label="@string/random_cat_facts">
 
         <action

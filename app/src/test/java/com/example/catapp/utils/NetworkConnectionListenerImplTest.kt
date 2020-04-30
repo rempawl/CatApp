@@ -7,30 +7,30 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-class DefaultNetworkConnectionListenerTest{
-    lateinit var networkConnectionListener: DefaultNetworkConnectionListener
+class NetworkConnectionListenerImplTest{
+    lateinit var networkConnectionListenerImpl: NetworkConnectionListenerImpl
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Before
     fun setUp(){
-        networkConnectionListener = DefaultNetworkConnectionListener()
+        networkConnectionListenerImpl = NetworkConnectionListenerImpl()
     }
 
     @Test
     fun `when onActive is called Then isConnectionActive value is true`(){
-        networkConnectionListener.onActive()
-        val isActive = networkConnectionListener.isConnectionActive.getOrAwaitValue()
+        networkConnectionListenerImpl.onActive()
+        val isActive = networkConnectionListenerImpl.isConnectionActive.getOrAwaitValue()
 
         assertTrue(isActive)
     }
 
     @Test
     fun `when onInactive is called then isConnectionActive value is false`(){
-        networkConnectionListener.onInactive()
+        networkConnectionListenerImpl.onInactive()
 
-        val isActive = networkConnectionListener.isConnectionActive.getOrAwaitValue()
+        val isActive = networkConnectionListenerImpl.isConnectionActive.getOrAwaitValue()
 
         assertFalse(isActive)
     }

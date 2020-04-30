@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.catapp.network.NetworkCallback
 import javax.inject.Inject
 
-class DefaultNetworkConnectionListener @Inject constructor() : NetworkCallback.NetworkConnectionListener {
+class NetworkConnectionListenerImpl @Inject constructor() : NetworkCallback.NetworkConnectionListener {
 
     private val _isConnectionActive = MutableLiveData<Boolean>()
 

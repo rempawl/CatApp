@@ -1,6 +1,5 @@
 package com.example.catapp.catFactsIdsList
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +25,10 @@ class CatFactsListAdapter @Inject constructor() :
         private fun navigateToCatFactDetails(view: View) {
             val id = binding.catFactId?._id ?: return
 
-                view.findNavController().navigate(
-                    CatFactsListFragmentDirections
-                        .navigationCatListFragmentToNavigationCatFactDetails(id)
-                )
+            view.findNavController().navigate(
+                CatFactsIdsFragmentDirections
+                    .navigationCatListFragmentToNavigationCatFactDetails(id)
+            )
         }
 
         fun bind(catFactId: CatFactId) {

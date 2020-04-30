@@ -1,11 +1,11 @@
 package com.example.catapp.catFactDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.data.formatDate
 import com.example.catapp.getOrAwaitValue
+import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.utils.SchedulerProvider
 import io.mockk.MockKAnnotations
 import io.mockk.every
@@ -14,19 +14,16 @@ import io.mockk.spyk
 import io.mockk.verify
 import io.reactivex.Single
 import io.reactivex.schedulers.TestScheduler
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import okhttp3.ResponseBody
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.jupiter.api.Assertions
 import retrofit2.HttpException
 import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
-@ExperimentalCoroutinesApi
 class CatFactDetailsViewModelTest {
 
     @get:Rule
@@ -61,7 +58,6 @@ class CatFactDetailsViewModelTest {
             schedulerProvider = schedulerProvider,
             stateModel = DefaultStateModel()
         )
-
 
 
         val before = viewModel.stateModel.isError.getOrAwaitValue()
@@ -134,7 +130,6 @@ class CatFactDetailsViewModelTest {
             spyModel.activateSuccessState()
         }
     }
-
 
 
     companion object {

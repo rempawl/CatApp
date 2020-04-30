@@ -22,7 +22,7 @@ open class MainActivity : AppCompatActivity() {
     val appComponent: AppComponent by lazy {
         (application as MyApp).appComponent
     }
-    
+
     private lateinit var appBarConfiguration: AppBarConfiguration
 
     private val connectivityManager by lazy {
@@ -49,22 +49,8 @@ open class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-
     }
 
-
-    protected open fun injectMembers() {
-        appComponent.inject(this)
-    }
-
-
-    private fun createNetworkRequest(): NetworkRequest {
-        return NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .build()
-    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -80,6 +66,19 @@ open class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    protected open fun injectMembers() {
+        appComponent.inject(this)
+    }
+
+
+    private fun createNetworkRequest(): NetworkRequest {
+        return NetworkRequest.Builder()
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .build()
     }
 
 

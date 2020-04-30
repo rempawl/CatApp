@@ -15,16 +15,15 @@ import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.databinding.CatFactsListFragmentBinding
 import com.example.catapp.di.viewModel
-import com.example.catapp.state.ErrorDialogFragment
+import com.example.catapp.state.ConfirmDialogFragment
 import javax.inject.Inject
 
 
-open class CatFactsListFragment : Fragment(), ErrorDialogFragment.OnConfirmClickListener {
+open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClickListener {
 
     companion object {
-        fun newInstance() = CatFactsListFragment()
+        fun newInstance() = CatFactsIdsFragment()
         const val SPAN_COUNT: Int = 2
-
     }
 
 
@@ -67,13 +66,13 @@ open class CatFactsListFragment : Fragment(), ErrorDialogFragment.OnConfirmClick
         viewModel.factsIds.observe(viewLifecycleOwner, Observer { factsIdsList ->
             catFactsListAdapter.submitList(factsIdsList)
         })
-        viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer {isError ->
-            if(isError) showErrorDialog()
+        viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer { isError ->
+            if (isError) showErrorDialog()
         })
     }
 
     private fun showErrorDialog() {
-        ErrorDialogFragment(getString(R.string.error_msg), getString(R.string.try_again))
+        ConfirmDialogFragment(getString(R.string.error_msg), getString(R.string.try_again), this)
             .show(childFragmentManager, "")
 
     }
@@ -82,7 +81,7 @@ open class CatFactsListFragment : Fragment(), ErrorDialogFragment.OnConfirmClick
     private fun setUpBinding() {
         binding?.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = this@CatFactsListFragment.viewModel
+            viewModel = this@CatFactsIdsFragment.viewModel
             catFactsList.apply {
                 adapter = catFactsListAdapter
 

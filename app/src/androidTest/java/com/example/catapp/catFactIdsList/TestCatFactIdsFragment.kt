@@ -1,6 +1,10 @@
-package com.example.catapp.catFactsIdsList
+package com.example.catapp.catFactIdsList
 
- class TestCatFactsIdsListFragment : CatFactsListFragment() {
+import com.example.catapp.catFactsIdsList.CatFactsIdsFragment
+import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
+import com.example.catapp.catFactsIdsList.CatFactsListAdapter
+
+class TestCatFactsIdsIdsFragment : CatFactsIdsFragment() {
     override fun injectViewModel(): CatFactsIdsViewModel = testViewModel
 
     override fun injectMembers() {
@@ -11,6 +15,5 @@ package com.example.catapp.catFactsIdsList
         lateinit var testViewModel: CatFactsIdsViewModel
         lateinit var testAdapter: CatFactsListAdapter
     }
-
 
 }

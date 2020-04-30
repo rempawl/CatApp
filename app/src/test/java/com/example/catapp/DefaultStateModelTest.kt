@@ -51,7 +51,6 @@ class DefaultStateModelTest{
 
     @Test
     fun `when  activateSuccessState is called, Then isSuccess is true, isError is false, isLoading is false`(){
-
         model.activateSuccessState()
 
         val error = model.isError.getOrAwaitValue()
@@ -62,7 +61,6 @@ class DefaultStateModelTest{
 
         val loading = model.isLoading.getOrAwaitValue()
         assertFalse(loading)
-
 
     }
 

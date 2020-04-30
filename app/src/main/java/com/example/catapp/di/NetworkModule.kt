@@ -4,7 +4,7 @@ import android.net.ConnectivityManager
 import com.example.catapp.MyApp.Companion.BASE_URL
 import com.example.catapp.network.CatFactsApi
 import com.example.catapp.network.NetworkCallback
-import com.example.catapp.utils.DefaultNetworkConnectionListener
+import com.example.catapp.utils.NetworkConnectionListenerImpl
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -26,8 +26,8 @@ object NetworkModule {
     @Provides
     @JvmStatic
     @Singleton
-    fun provideNetworkChangeListener(): NetworkCallback.NetworkConnectionListener =
-        DefaultNetworkConnectionListener()
+    fun provideNetworkConnectionListener(): NetworkCallback.NetworkConnectionListener =
+        NetworkConnectionListenerImpl()
 
     @Provides
     @Reusable

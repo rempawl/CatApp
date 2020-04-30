@@ -2,11 +2,11 @@ package com.example.catapp.network
 
 import android.net.ConnectivityManager
 import android.net.Network
-import android.util.Log
 import androidx.lifecycle.LiveData
 import javax.inject.Inject
 
-class NetworkCallback @Inject constructor(private val listener: NetworkConnectionListener)  : ConnectivityManager.NetworkCallback() {
+class NetworkCallback @Inject constructor(private val listener: NetworkConnectionListener) :
+    ConnectivityManager.NetworkCallback() {
 
 
     override fun onAvailable(network: Network) {
@@ -18,13 +18,12 @@ class NetworkCallback @Inject constructor(private val listener: NetworkConnectio
     override fun onLost(network: Network) {
         //todo turning off wifi bug
         super.onLost(network)
-//        Log.d("kruci","on lost")
         listener.onInactive()
     }
 
 
     interface NetworkConnectionListener {
-        val isConnectionActive : LiveData<Boolean>
+        val isConnectionActive: LiveData<Boolean>
         fun onInactive()
         fun onActive()
     }

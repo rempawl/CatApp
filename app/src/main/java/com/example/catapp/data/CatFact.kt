@@ -7,13 +7,12 @@ import com.squareup.moshi.JsonClass
 data class CatFact(
     val text: String,
     val updatedAt: String
-) {
+)
 
-}
 fun CatFact.formatDate(): String {
     return updatedAt
         .split("T")[0]
         .split("-")
         .reversed()
-        .joinToString(" - ")
+        .joinToString("-")
 }

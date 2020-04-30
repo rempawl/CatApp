@@ -10,6 +10,6 @@ object ModelModule {
 
     @Provides
     @JvmStatic
-    fun provideErrorModel() : StateModel =
+    fun provideStateModel(): StateModel =
         DefaultStateModel()
 }

@@ -7,9 +7,8 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.runner.AndroidJUnit4
-import com.example.catapp.state.DefaultStateModel
 import com.example.catapp.R
-import com.example.catapp.catFactsIdsList.FakeFactsIdsViewModel
+import com.example.catapp.state.DefaultStateModel
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -19,7 +18,6 @@ class CatFactDetailsFragmentTest {
     private lateinit var viewModel: CatFactDetailsViewModel
 
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactDetailsFragment>
-
 
 
     @Test
@@ -47,7 +45,8 @@ class CatFactDetailsFragmentTest {
         viewModel = FakeCatFactDetailsViewModel(DefaultStateModel())
         TestCatFactDetailsFragment.testViewModel = viewModel
 
-        fragmentScenario = launchFragmentInContainer<TestCatFactDetailsFragment>(Bundle(), R.style.AppTheme)
+        fragmentScenario =
+            launchFragmentInContainer<TestCatFactDetailsFragment>(Bundle(), R.style.AppTheme)
 
 
         Espresso

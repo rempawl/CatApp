@@ -11,21 +11,10 @@ import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import com.example.catapp.di.viewModel
-import com.example.catapp.state.ErrorDialogFragment
+import com.example.catapp.state.ConfirmDialogFragment
 
-class FakeCatFactDetailsFragment : CatFactDetailsFragment()  {
 
-    override fun injectViewModel(): CatFactDetailsViewModel {
-        return viewModel
-    }
-
-    companion object {
-        lateinit var viewModel: CatFactDetailsViewModel
-    }
-
-}
-
-open class CatFactDetailsFragment : Fragment(),ErrorDialogFragment.OnConfirmClickListener {
+open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClickListener {
 
     companion object {
         fun newInstance() = CatFactDetailsFragment()
@@ -64,19 +53,13 @@ open class CatFactDetailsFragment : Fragment(),ErrorDialogFragment.OnConfirmClic
     }
 
     private fun showErrorDialog() {
-        ErrorDialogFragment(getString(R.string.error_msg), getString(R.string.try_again))
+        ConfirmDialogFragment(getString(R.string.error_msg), getString(R.string.try_again), this)
             .show(childFragmentManager, "")
     }
 
     private fun setUpBinding(binding: CatFactDetailsFragmentBinding) {
         binding.viewModel = this.viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
-/*
-        viewModel.catFactDetail.observe(viewLifecycleOwner, Observer { fact ->
-            binding.catFact = fact
-        })
-*/
 
 
     }
