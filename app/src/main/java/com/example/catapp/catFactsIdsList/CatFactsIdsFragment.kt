@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -98,12 +97,10 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
 
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    open fun injectViewModel(): CatFactsIdsViewModel =
+    protected open fun injectViewModel(): CatFactsIdsViewModel =
         (activity as MainActivity).appComponent.catFactsIdsViewModel
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    open fun injectMembers() {
+    protected open fun injectMembers() {
         (activity as MainActivity).appComponent.inject(this)
     }
 

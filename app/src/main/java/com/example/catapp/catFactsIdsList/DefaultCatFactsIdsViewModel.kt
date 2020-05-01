@@ -37,7 +37,6 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
         fetchData()
     }
 
-
     fun fetchData() {
         stateModel.activateLoadingState()
 

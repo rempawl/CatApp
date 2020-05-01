@@ -17,21 +17,22 @@
         android:layout_height="match_parent"
         tools:context=".catFactsIdsList.CatFactsIdsFragment">
 
-        <include
-            layout="@layout/loading_layout"
-            android:id="@+id/loading"
-            app:showWhen="@{viewModel.stateModel.isLoading()}"
-            />
-
-        <include
-            layout="@layout/error_layout"
-            android:id="@+id/error_view"
-            app:showWhen="@{viewModel.stateModel.isError()}"
-            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <include
+                layout="@layout/loading_layout"
+                android:id="@+id/loading"
+                app:showWhen="@{viewModel.stateModel.isLoading()}"
+                />
+
+            <include
+                layout="@layout/error_layout"
+                android:id="@+id/error_view"
+                app:showWhen="@{viewModel.stateModel.isError()}"
+                />
+
 
 
             <androidx.recyclerview.widget.RecyclerView
