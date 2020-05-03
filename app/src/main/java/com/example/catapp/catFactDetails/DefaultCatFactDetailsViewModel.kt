@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
 import com.example.catapp.state.State
-import com.example.catapp.state.StateModel
 import com.example.catapp.utils.SchedulerProvider
 import com.example.catapp.utils.SingleSubscriber
 import com.squareup.inject.assisted.Assisted

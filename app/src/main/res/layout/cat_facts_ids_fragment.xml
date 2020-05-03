@@ -37,7 +37,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cat_facts_list"
-                showWhen="@{viewModel.state.success}"
+                app:showWhen="@{viewModel.state.success}"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"

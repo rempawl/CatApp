@@ -11,12 +11,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import com.example.catapp.MainActivity
 import com.example.catapp.R
-import com.example.catapp.databinding.CatFactsListFragmentBinding
+import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.state.ConfirmDialogFragment
+import com.example.catapp.state.State
 import javax.inject.Inject
 
 
@@ -34,14 +34,17 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
 
 
     @Inject
-    lateinit var catFactListAdapterFactory : CatFactsListAdapter.Factory
-    private val catFactsListAdapter: CatFactsListAdapter by lazy {  catFactListAdapterFactory.create { factId  ->
-        findNavController().navigate(CatFactsIdsFragmentDirections
-            .navigationCatListFragmentToNavigationCatFactDetails(factId._id)
-        )
-    } }
+    lateinit var catFactListAdapterFactory: CatFactsListAdapter.Factory
+    private val catFactsListAdapter: CatFactsListAdapter by lazy {
+        catFactListAdapterFactory.create { factId ->
+            findNavController().navigate(
+                CatFactsIdsFragmentDirections
+                    .navigationCatListFragmentToNavigationCatFactDetails(factId._id)
+            )
+        }
+    }
 
-    private var binding: CatFactsListFragmentBinding? = null
+    private var binding: CatFactsIdsFragmentBinding? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,18 +56,18 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = CatFactsListFragmentBinding
+        binding = CatFactsIdsFragmentBinding
             .inflate(inflater, container, false)
 
         setUpBinding()
         setUpObservers()
 
-        return binding?.root
+        return binding!!.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding?.catFactsList?.adapter = null
+        binding!!.catFactsList.adapter = null
         binding = null
     }
 
@@ -72,8 +75,8 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         viewModel.factsIds.observe(viewLifecycleOwner, Observer { factsIdsList ->
             catFactsListAdapter.submitList(factsIdsList)
         })
-        viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer { isError ->
-            if (isError) showErrorDialog()
+        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            if (state is State.Error) showErrorDialog()
         })
     }
 

@@ -12,6 +12,8 @@ import com.example.catapp.R
 import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.state.ConfirmDialogFragment
+import com.example.catapp.state.State
+
 
 
 open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClickListener {
@@ -47,8 +49,8 @@ open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmC
     }
 
     private fun setUpObservers() {
-        viewModel.stateModel.isError.observe(viewLifecycleOwner, Observer { isError ->
-            if (isError) showErrorDialog()
+        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            if (state is State.Error) showErrorDialog()
         })
     }
 
