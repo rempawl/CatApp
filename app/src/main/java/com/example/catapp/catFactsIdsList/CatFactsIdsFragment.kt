@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.databinding.CatFactsListFragmentBinding
@@ -32,7 +34,12 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
 
 
     @Inject
-    lateinit var catFactsListAdapter: CatFactsListAdapter
+    lateinit var catFactListAdapterFactory : CatFactsListAdapter.Factory
+    private val catFactsListAdapter: CatFactsListAdapter by lazy {  catFactListAdapterFactory.create { factId  ->
+        findNavController().navigate(CatFactsIdsFragmentDirections
+            .navigationCatListFragmentToNavigationCatFactDetails(factId._id)
+        )
+    } }
 
     private var binding: CatFactsListFragmentBinding? = null
 

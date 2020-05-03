@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
-import com.example.catapp.state.StateModel
+import com.example.catapp.state.State
 import com.example.catapp.utils.SchedulerProvider
 import com.example.catapp.utils.SingleSubscriber
 import io.reactivex.disposables.CompositeDisposable
@@ -12,13 +12,17 @@ import javax.inject.Inject
 
 class DefaultCatFactsIdsViewModel @Inject constructor(
     private val catFactRepository: CatFactRepository,
-    private val schedulerProvider: SchedulerProvider,
-    stateModel: StateModel
-) : CatFactsIdsViewModel(stateModel), SingleSubscriber<List<CatFactId>> {
+    private val schedulerProvider: SchedulerProvider
+) : CatFactsIdsViewModel(), SingleSubscriber<List<CatFactId>> {
 
     private val disposables = CompositeDisposable()
 
     private val _factsIds = MutableLiveData<List<CatFactId>>()
+
+    private val _state = MutableLiveData<State<*>>()
+    override val state: LiveData<State<*>>
+        get() = _state
+
     override val factsIds: LiveData<List<CatFactId>>
         get() = _factsIds
 
@@ -38,7 +42,7 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     }
 
     fun fetchData() {
-        stateModel.activateLoadingState()
+        _state.value = State.Loading
 
         val data = catFactRepository.getCatFactsIds()
 
@@ -46,12 +50,12 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     }
 
     override fun onError(e: Throwable) {
-        stateModel.activateErrorState()
+        _state.value = State.Error(e)
     }
 
     override fun onSuccess(data: List<CatFactId>) {
         _factsIds.value = (data)
-        stateModel.activateSuccessState()
+        _state.value = State.Success(data)
     }
 
 

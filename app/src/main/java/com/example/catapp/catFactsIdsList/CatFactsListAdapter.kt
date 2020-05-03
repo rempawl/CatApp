@@ -1,38 +1,30 @@
 package com.example.catapp.catFactsIdsList
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catapp.data.CatFactId
 import com.example.catapp.databinding.CatFactsListItemBinding
-import javax.inject.Inject
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 
-class CatFactsListAdapter @Inject constructor() :
-    ListAdapter<CatFactId, CatFactsListAdapter.CatFactViewHolder>(CatFactDiffCallBack()) {
+class CatFactsListAdapter @AssistedInject constructor(
+    @Assisted private val clickListener: (CatFactId) -> Unit
+) : ListAdapter<CatFactId, CatFactsListAdapter.CatFactViewHolder>(CatFactDiffCallBack()) {
+
+    @AssistedInject.Factory
+    interface Factory{
+         fun create(clickListener: (CatFactId) -> Unit) : CatFactsListAdapter
+    }
 
     inner class CatFactViewHolder(private val binding: CatFactsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.container.setOnClickListener {
-                navigateToCatFactDetails(it)
-            }
-        }
-
-        private fun navigateToCatFactDetails(view: View) {
-            val id = binding.catFactId?._id ?: return
-
-            view.findNavController().navigate(
-                CatFactsIdsFragmentDirections
-                    .navigationCatListFragmentToNavigationCatFactDetails(id)
-            )
-        }
 
         fun bind(catFactId: CatFactId) {
             binding.catFactId = catFactId
+            binding.container.setOnClickListener { clickListener(catFactId) }
             binding.executePendingBindings()
         }
     }

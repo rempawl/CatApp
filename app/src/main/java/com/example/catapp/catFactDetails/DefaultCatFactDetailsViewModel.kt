@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
+import com.example.catapp.state.State
 import com.example.catapp.state.StateModel
 import com.example.catapp.utils.SchedulerProvider
 import com.example.catapp.utils.SingleSubscriber
@@ -14,9 +15,8 @@ import io.reactivex.disposables.CompositeDisposable
 class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val catFactRepository: CatFactRepository,
     @Assisted private val factId: String,
-    private val schedulerProvider: SchedulerProvider,
-    stateModel: StateModel
-) : CatFactDetailsViewModel(stateModel), SingleSubscriber<CatFact> {
+    private val schedulerProvider: SchedulerProvider
+) : CatFactDetailsViewModel(), SingleSubscriber<CatFact> {
 
     @AssistedInject.Factory
     interface Factory {
@@ -26,6 +26,11 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val disposables = CompositeDisposable()
 
     private val _catFactDetail = MutableLiveData<CatFact>()
+
+    private val _state = MutableLiveData<State<*>>()
+    override val state: LiveData<State<*>>
+        get() = _state
+
     override val catFactDetail: LiveData<CatFact>
         get() = _catFactDetail
 
@@ -36,7 +41,7 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     }
 
     override fun refresh() {
-        _catFactDetail.value = null
+        _catFactDetail.postValue( null)
         fetchData()
     }
 
@@ -45,7 +50,7 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     }
 
     fun fetchData() {
-        stateModel.activateLoadingState()
+        _state.postValue(  State.Loading)
 
         val data = catFactRepository.getCatFact(factId)
 
@@ -55,13 +60,12 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
 
 
     override fun onError(e: Throwable) {
-        stateModel.activateErrorState()
+        _state.postValue( State.Error(e))
     }
 
     override fun onSuccess(data: CatFact) {
-        _catFactDetail.value = data
-        stateModel.activateSuccessState()
+        _catFactDetail.postValue(  data)
+        _state.postValue(  State.Success(data))
     }
-
 
 }

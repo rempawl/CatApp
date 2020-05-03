@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.catapp.catFactDetails.CatFactDetailsViewModel" />
@@ -22,52 +21,48 @@
         tools:context=".catFactDetails.CatFactDetailsFragment">
 
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <include
-                layout="@layout/loading_layout"
                 android:id="@+id/loading"
-                app:showWhen="@{viewModel.stateModel.isLoading()}"
-                />
+                layout="@layout/loading_layout"
+                app:showWhen="@{viewModel.state.loading}" />
 
-
-            <include layout="@layout/error_layout"
+            <include
                 android:id="@+id/error_view"
-                app:showWhen="@{viewModel.stateModel.isError()}"
-                />
-
+                layout="@layout/error_layout"
+                app:showWhen="@{viewModel.state.error}" />
 
 
             <LinearLayout
-                    android:id="@+id/fact_container"
+                android:id="@+id/fact_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:showWhen="@{viewModel.state.success}">
+
+
+                <TextView
+                    android:id="@+id/fact_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone"
-                    app:showWhen="@{viewModel.stateModel.isSuccess()}">
+                    android:layout_margin="20dp"
+                    android:text="@{@string/fact_text(viewModel.catFactDetail.text)}"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
 
-                    <TextView
-                        android:id="@+id/fact_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="@{@string/fact_text(viewModel.catFactDetail.text)}"
-                        android:textAlignment="center"
-                        android:textSize="25sp"
-                         />
-
-                    <TextView
-                        android:id="@+id/update_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="20dp"
-                        android:text="@{@string/update_date(viewModel.catFactDetail.updatedAt)}"
-                        android:textAlignment="center"
-                        android:textSize="25sp"
-                        />
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/update_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="@{@string/update_date(viewModel.catFactDetail.updatedAt)}"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+            </LinearLayout>
 
 
         </ScrollView>
