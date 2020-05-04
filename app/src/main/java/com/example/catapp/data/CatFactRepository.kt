@@ -1,10 +1,11 @@
 package com.example.catapp.data
 
 
-import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 
 interface CatFactRepository {
-    fun getCatFactsIds(): Single<List<CatFactId>>
 
-    fun getCatFact(id: String) : Single<CatFact>
+    fun getCatFactsIdsAsync(): Deferred<List<CatFactId>>
+
+    fun getCatFactAsync(id: String): Deferred<CatFact>
 }

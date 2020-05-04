@@ -15,17 +15,19 @@ class CatFactsListAdapter @AssistedInject constructor(
 ) : ListAdapter<CatFactId, CatFactsListAdapter.CatFactViewHolder>(CatFactDiffCallBack()) {
 
     @AssistedInject.Factory
-    interface Factory{
-         fun create(clickListener: (CatFactId) -> Unit) : CatFactsListAdapter
+    interface Factory {
+        fun create(clickListener: (CatFactId) -> Unit): CatFactsListAdapter
     }
 
     inner class CatFactViewHolder(private val binding: CatFactsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(catFactId: CatFactId) {
-            binding.catFactId = catFactId
-            binding.container.setOnClickListener { clickListener(catFactId) }
-            binding.executePendingBindings()
+            binding.apply {
+                this.catFactId = catFactId
+                container.setOnClickListener { clickListener(catFactId) }
+                executePendingBindings()
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import com.example.catapp.MyApp.Companion.BASE_URL
 import com.example.catapp.network.CatFactsApi
 import com.example.catapp.network.NetworkCallback
 import com.example.catapp.utils.NetworkConnectionListenerImpl
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -48,6 +49,6 @@ object NetworkModule {
     fun provideRetrofitInterface(moshi: Moshi): Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
 }

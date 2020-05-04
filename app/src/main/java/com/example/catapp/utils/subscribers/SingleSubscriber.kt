@@ -1,13 +1,10 @@
-package com.example.catapp.utils
+package com.example.catapp.utils.subscribers
 
+import com.example.catapp.utils.SchedulerProvider
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 
-interface Subscriber<T> {
-    fun subscribeData(data: T, schedulerProvider: SchedulerProvider): Disposable
-}
-
-interface SingleSubscriber<R> : Subscriber<Single<R>> {
+interface SingleSubscriber<R> :    Subscriber<Single<R>> {
 
     override fun subscribeData(data: Single<R>, schedulerProvider: SchedulerProvider): Disposable {
         return data
@@ -23,3 +20,5 @@ interface SingleSubscriber<R> : Subscriber<Single<R>> {
 
     fun onError(e: Throwable)
 }
+
+

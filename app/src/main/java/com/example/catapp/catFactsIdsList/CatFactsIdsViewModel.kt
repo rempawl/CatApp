@@ -3,7 +3,7 @@ package com.example.catapp.catFactsIdsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.catapp.data.CatFactId
-import com.example.catapp.state.State
+import com.example.catapp.utils.State
 
 
 abstract class CatFactsIdsViewModel : ViewModel() {

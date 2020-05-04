@@ -1,4 +1,4 @@
-package com.example.catapp.state
+package com.example.catapp.utils
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -12,8 +12,6 @@ class ConfirmDialogFragment(
     private val positiveText: String,
     private val listener : OnConfirmClickListener
 ) : DialogFragment() {
-
-
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

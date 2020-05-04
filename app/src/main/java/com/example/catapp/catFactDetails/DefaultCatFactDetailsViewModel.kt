@@ -2,27 +2,30 @@ package com.example.catapp.catFactDetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import com.example.catapp.data.CatFact
 import com.example.catapp.data.CatFactRepository
-import com.example.catapp.state.State
-import com.example.catapp.utils.SchedulerProvider
-import com.example.catapp.utils.SingleSubscriber
+import com.example.catapp.data.formatUpdateDate
+import com.example.catapp.utils.State
+import com.example.catapp.utils.subscribers.CoroutineSubscriber
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 
 class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val catFactRepository: CatFactRepository,
-    @Assisted private val factId: String,
-    private val schedulerProvider: SchedulerProvider
-) : CatFactDetailsViewModel(), SingleSubscriber<CatFact> {
+    @Assisted private val factId: String
+//    private val schedulerProvider: SchedulerProvider
+) : CatFactDetailsViewModel(),
+    CoroutineSubscriber<CatFact> {
 
     @AssistedInject.Factory
     interface Factory {
         fun create(factId: String): DefaultCatFactDetailsViewModel
     }
 
-    private val disposables = CompositeDisposable()
+//    private val disposables = CompositeDisposable()
 
     private val _catFactDetail = MutableLiveData<CatFact>()
 
@@ -36,11 +39,11 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        disposables.clear()
+//        disposables.clear()
     }
 
     override fun refresh() {
-        _catFactDetail.postValue( null)
+        _catFactDetail.value = (null)
         fetchData()
     }
 
@@ -49,22 +52,27 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     }
 
     fun fetchData() {
-        _state.postValue(  State.Loading)
+        _state.postValue(State.Loading)
 
-        val data = catFactRepository.getCatFact(factId)
+        val data = catFactRepository.getCatFactAsync(factId)
 
-        disposables.add(subscribeData(data, schedulerProvider))
+        viewModelScope.launch {
+            subscribeData(data)
+        }
 
     }
 
 
     override fun onError(e: Throwable) {
-        _state.postValue( State.Error(e))
+        _state.value = (State.Error(e))
     }
 
     override fun onSuccess(data: CatFact) {
-        _catFactDetail.postValue(  data)
-        _state.postValue(  State.Success(data))
+        val fact = State.Success(data.copy(updatedAt = data.formatUpdateDate()))
+
+        _catFactDetail.value = (fact.data)
+        _state.value = fact
     }
+
 
 }

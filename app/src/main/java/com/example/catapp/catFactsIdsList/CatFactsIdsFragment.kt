@@ -15,8 +15,8 @@ import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
-import com.example.catapp.state.ConfirmDialogFragment
-import com.example.catapp.state.State
+import com.example.catapp.utils.ConfirmDialogFragment
+import com.example.catapp.utils.State
 import javax.inject.Inject
 
 
@@ -81,7 +81,11 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
     }
 
     private fun showErrorDialog() {
-        ConfirmDialogFragment(getString(R.string.error_msg), getString(R.string.try_again), this)
+        ConfirmDialogFragment(
+            getString(R.string.error_msg),
+            getString(R.string.try_again),
+            this
+        )
             .show(childFragmentManager, "")
 
     }

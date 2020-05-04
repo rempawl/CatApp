@@ -1,10 +1,4 @@
-package com.example.catapp.state
-
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import java.lang.Error
-import javax.inject.Inject
-import kotlin.Exception
+package com.example.catapp.utils
 
 
 sealed class State<T>{

@@ -9,7 +9,7 @@ data class CatFact(
     val updatedAt: String
 )
 
-fun CatFact.formatDate(): String {
+fun CatFact.formatUpdateDate(): String {
     return updatedAt
         .split("T")[0]
         .split("-")
