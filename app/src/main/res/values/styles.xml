@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DefaultBodyTextAppearance" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">25sp</item>
+    </style>
+
+    <style name="DefaultCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_margin">10dp</item>
+        <item name="cardCornerRadius">10dp</item>
+    </style>
+
 </resources>

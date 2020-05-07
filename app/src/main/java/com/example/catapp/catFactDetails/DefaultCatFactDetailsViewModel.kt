@@ -52,7 +52,6 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
         viewModelScope.launch {
             subscribeData(data)
         }
-
     }
 
 

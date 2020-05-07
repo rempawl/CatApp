@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".catFactDetails.CatFactDetailsFragment">
+
         <include
             android:id="@+id/loading"
             layout="@layout/loading_layout"
@@ -28,7 +29,6 @@
             android:id="@+id/error_view"
             layout="@layout/error_layout"
             app:showWhen="@{viewModel.result.error}" />
-
 
 
         <ScrollView
@@ -48,20 +48,18 @@
                 <TextView
                     android:id="@+id/fact_text"
                     android:layout_width="match_parent"
+                    android:textAppearance="@style/DefaultBodyTextAppearance"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:text="@{@string/fact_text(viewModel.catFactDetail.text)}"
-                    android:textAlignment="center"
-                    android:textSize="25sp" />
+                    android:text="@{@string/fact_text(viewModel.catFactDetail.text)}" />
 
                 <TextView
+                    android:text="@{@string/update_date(viewModel.catFactDetail.updatedAt)}"
                     android:id="@+id/update_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:text="@{@string/update_date(viewModel.catFactDetail.updatedAt)}"
-                    android:textAlignment="center"
-                    android:textSize="25sp" />
+                    android:textAppearance="@style/DefaultBodyTextAppearance" />
             </LinearLayout>
 
 
