@@ -2,11 +2,12 @@ package com.example.catapp.utils.subscribers
 
 import kotlinx.coroutines.Deferred
 
+@Suppress("SpellCheckingInspection")
 interface CoroutineSubscriber<T> {
 
     suspend fun subscribeData(result: Deferred<T>) {
-        val data = result.await()
         try {
+            val data = result.await()
             onSuccess(data)
         } catch (e: Throwable) {
             onError(e)

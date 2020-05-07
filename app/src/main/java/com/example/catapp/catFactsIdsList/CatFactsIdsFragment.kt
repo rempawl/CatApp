@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.R
+import com.example.catapp.data.State
 import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.utils.ConfirmDialogFragment
-import com.example.catapp.utils.State
 import javax.inject.Inject
 
 
@@ -76,15 +76,16 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
             catFactsListAdapter.submitList(factsIdsList)
         })
         viewModel.state.observe(viewLifecycleOwner, Observer { state ->
-            if (state is State.Error) showErrorDialog()
+            if (state is State.Error) showErrorDialog(state.message)
         })
     }
 
-    private fun showErrorDialog() {
+    private fun showErrorDialog(message: String) {
         ConfirmDialogFragment(
-            getString(R.string.error_msg),
-            getString(R.string.try_again),
-            this
+            title = getString(R.string.error_msg),
+            positiveText = getString(R.string.try_again),
+            listener = this,
+            message = message
         )
             .show(childFragmentManager, "")
 

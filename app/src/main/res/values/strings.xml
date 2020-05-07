@@ -10,4 +10,10 @@
     <string name="try_again">Try Again</string>
     <string name="error_msg">An error ocurred</string>
     <string name="cancel">Cancel</string>
+    <string name="not_found_error"> 404 - Not Found</string>
+    <string name="bad_request_error">400 - Bad Request</string>
+    <string name="forbidden_error">403 - Forbidden</string>
+    <string name="server_error">500 - Server Error</string>
+    <string name="connection_error">Connection Problem</string>
+    <string name="timeout_error">The connection with server has timed out</string>
 </resources>

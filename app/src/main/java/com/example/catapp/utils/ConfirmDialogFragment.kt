@@ -6,15 +6,16 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.catapp.R
 
-@Suppress("DEPRECATION")
 class ConfirmDialogFragment(
     private val title: String,
     private val positiveText: String,
-    private val listener : OnConfirmClickListener
+    private val listener: OnConfirmClickListener,
+    private val message: String = ""
 ) : DialogFragment() {
 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        @Suppress("DEPRECATION")
         retainInstance = true
 
         return activity?.let {
@@ -23,7 +24,8 @@ class ConfirmDialogFragment(
                 .setPositiveButton(positiveText) { _, _ ->
                     listener.onConfirm()
                 }
-               .setNegativeButton(getString(R.string.cancel)) { _, _ -> dismiss() }
+                .setMessage(message)
+                .setNegativeButton(getString(R.string.cancel)) { _, _ -> dismiss() }
                 .setTitle(title)
                 .create()
 

@@ -9,11 +9,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.catapp.MainActivity
 import com.example.catapp.R
+import com.example.catapp.data.State
 import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.utils.ConfirmDialogFragment
-import com.example.catapp.utils.State
-
 
 
 open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClickListener {
@@ -50,23 +49,22 @@ open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmC
 
     private fun setUpObservers() {
         viewModel.state.observe(viewLifecycleOwner, Observer { state ->
-            if (state is State.Error) showErrorDialog()
+            if (state is State.Error) showErrorDialog(state.message)
         })
     }
 
-    private fun showErrorDialog() {
+    private fun showErrorDialog(message: String) {
         ConfirmDialogFragment(
-            getString(R.string.error_msg),
-            getString(R.string.try_again),
-            this
-        )
-            .show(childFragmentManager, "")
+            title =  getString(R.string.error_msg) ,
+            positiveText = getString(R.string.try_again),
+            listener = this,
+            message = message
+        ).show(childFragmentManager, "")
     }
 
     private fun setUpBinding(binding: CatFactDetailsFragmentBinding) {
         binding.viewModel = this.viewModel
         binding.lifecycleOwner = viewLifecycleOwner
-
 
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,6 @@ open class MainActivity : AppCompatActivity() {
         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
-
     @Inject
     @JvmField
     var networkConnectionListener: NetworkCallback.NetworkConnectionListener? = null
@@ -37,7 +37,6 @@ open class MainActivity : AppCompatActivity() {
     @Inject
     @JvmField
     var networkCallback: ConnectivityManager.NetworkCallback? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         injectMembers()
@@ -83,13 +82,18 @@ open class MainActivity : AppCompatActivity() {
 
 
     private fun registerNetworkCallback() {
-        val networkRequest = createNetworkRequest()
 
-//        observeNetworkState()
+        observeNetworkState()
 
         if (networkCallback != null) {
-            connectivityManager
-                .registerNetworkCallback(networkRequest, networkCallback!!)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                connectivityManager.registerDefaultNetworkCallback(networkCallback!!)
+            } else {
+                val networkRequest = createNetworkRequest()
+                connectivityManager.registerNetworkCallback(networkRequest, networkCallback!!)
+
+            }
         }
     }
 
