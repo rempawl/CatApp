@@ -1,7 +1,7 @@
 package com.example.catapp.data.errorModel
 
 import com.example.catapp.R
-import com.example.catapp.utils.ResourcesProvider
+import com.example.catapp.utils.providers.ResourcesProvider
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import javax.inject.Inject

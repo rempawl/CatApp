@@ -22,12 +22,12 @@
         <include
             android:id="@+id/loading"
             layout="@layout/loading_layout"
-            app:showWhen="@{viewModel.state.loading}" />
+            app:showWhen="@{viewModel.result.loading}" />
 
         <include
             android:id="@+id/error_view"
             layout="@layout/error_layout"
-            app:showWhen="@{viewModel.state.error}" />
+            app:showWhen="@{viewModel.result.error}" />
 
 
 
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                app:showWhen="@{viewModel.state.success}">
+                app:showWhen="@{viewModel.result.success}">
 
 
                 <TextView

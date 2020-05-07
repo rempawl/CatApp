@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.R
-import com.example.catapp.data.State
+import com.example.catapp.data.Result
 import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.utils.ConfirmDialogFragment
@@ -75,8 +75,8 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         viewModel.factsIds.observe(viewLifecycleOwner, Observer { factsIdsList ->
             catFactsListAdapter.submitList(factsIdsList)
         })
-        viewModel.state.observe(viewLifecycleOwner, Observer { state ->
-            if (state is State.Error) showErrorDialog(state.message)
+        viewModel.result.observe(viewLifecycleOwner, Observer { res ->
+            if (res is Result.Error) showErrorDialog(res.message)
         })
     }
 

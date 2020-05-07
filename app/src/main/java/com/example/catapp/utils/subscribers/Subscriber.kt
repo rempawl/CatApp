@@ -1,6 +1,6 @@
 package com.example.catapp.utils.subscribers
 
-import com.example.catapp.utils.SchedulerProvider
+import com.example.catapp.utils.providers.SchedulerProvider
 import io.reactivex.disposables.Disposable
 
 interface Subscriber<T> {

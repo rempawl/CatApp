@@ -24,20 +24,20 @@
             <include
                 layout="@layout/loading_layout"
                 android:id="@+id/loading"
-                app:showWhen="@{viewModel.state.loading}"
+                app:showWhen="@{viewModel.result.loading}"
                 />
 
             <include
                 layout="@layout/error_layout"
                 android:id="@+id/error_view"
-                app:showWhen="@{viewModel.state.error}"
+                app:showWhen="@{viewModel.result.error}"
                 />
 
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/cat_facts_list"
-                app:showWhen="@{viewModel.state.success}"
+                app:showWhen="@{viewModel.result.success}"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"

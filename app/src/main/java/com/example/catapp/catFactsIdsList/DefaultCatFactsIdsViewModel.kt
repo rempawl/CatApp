@@ -3,10 +3,10 @@ package com.example.catapp.catFactsIdsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.CatFactId
 import com.example.catapp.data.CatFactRepository
-import com.example.catapp.data.State
+import com.example.catapp.data.Result
+import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.utils.subscribers.CoroutineSubscriber
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,9 +20,9 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 
     private val _factsIds = MutableLiveData<List<CatFactId>>()
 
-    private val _state = MutableLiveData<State<*>>()
-    override val state: LiveData<State<*>>
-        get() = _state
+    private val _result = MutableLiveData<Result<*>>()
+    override val result: LiveData<Result<*>>
+        get() = _result
 
     override val factsIds: LiveData<List<CatFactId>>
         get() = _factsIds
@@ -38,7 +38,7 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     }
 
     fun fetchData() {
-        _state.value = (State.Loading)
+        _result.value = (Result.Loading)
 
         val data = catFactRepository.getCatFactsIdsAsync()
         viewModelScope.launch {
@@ -49,12 +49,12 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 
     override fun onError(e: Throwable) {
         val message = errorModel.getErrorMessage(e)
-        _state.value = (State.Error(message))
+        _result.value = (Result.Error(message))
     }
 
     override fun onSuccess(result: List<CatFactId>) {
         _factsIds.value = (result)
-        _state.value = (State.Success(result))
+        _result.value = (Result.Success(result))
     }
 
 

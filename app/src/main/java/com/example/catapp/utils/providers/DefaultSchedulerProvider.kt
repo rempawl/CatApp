@@ -1,16 +1,12 @@
-package com.example.catapp.utils
+package com.example.catapp.utils.providers
 
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-interface SchedulerProvider {
-    fun getIOScheduler(): Scheduler
-    fun getUIScheduler(): Scheduler
-}
-
-class DefaultSchedulerProvider @Inject constructor() : SchedulerProvider {
+class DefaultSchedulerProvider @Inject constructor() :
+    SchedulerProvider {
     override fun getIOScheduler(): Scheduler {
         return Schedulers.io()
     }
