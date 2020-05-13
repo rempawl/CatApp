@@ -1,4 +1,4 @@
-package com.example.catapp
+package com.example.catapp.testUtils
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData

@@ -1,28 +1,36 @@
 package com.example.catapp.catFactsIdsList
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.data.entities.CatFact
-import com.example.catapp.data.entities.CatFactId
+import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.repository.CatFactRepository
+import com.example.catapp.testUtils.CoroutineScopeRule
+import com.example.catapp.testUtils.TestDispatchersProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
-import io.reactivex.schedulers.TestScheduler
-import okhttp3.ResponseBody
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import retrofit2.Response
 
+@ExperimentalCoroutinesApi
 class CatFactsIdsViewModelTest {
 
+
+    private val dispatchersProvider = TestDispatchersProvider()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    val coroutineScopeRule = CoroutineScopeRule(dispatchersProvider.dispatcher)
+
     @MockK
     lateinit var repository: CatFactRepository
 
+    @MockK
+    lateinit var errorModel: ErrorModel
     private lateinit var viewModel: DefaultCatFactsIdsViewModel
 
 
@@ -33,33 +41,23 @@ class CatFactsIdsViewModelTest {
 
 
     @Test
-    fun `when repository  returns Single_Error ,Then isNetworkError is set to  true`() {
+    fun `when repository  returns Error ,Then `() {
 //        every { repository.getCatFactsIds() } returns
 
-//        viewModel = DefaultCatFactsIdsViewModel(
-//            catFactRepository = repository
-//        )
+        viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
 
-
-//        val before = viewModel.stateModel.isError.getOrAwaitValue()
-//        assertFalse(before)
 
 //        viewModel.fetchData()
 //        TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
 //
-//        val after = viewModel.stateModel.isError.getOrAwaitValue()
-//        assertTrue(after)
     }
 
     @Test
     fun `when repository returns TEST_IDS, items value is TEST_IDS`() {
 //        every { repository.getCatFactsIdsRx() } returns Single.just(TEST_IDS)
+        viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
 
-//        viewModel = DefaultCatFactsIdsViewModel(
-//            catFactRepository = repository
-//        )
-//
-//        viewModel.fetchData()
+        viewModel.fetchData()
 //
 //        val data = viewModel.factsIds.getOrAwaitValue()
 //        assertThat(data, `is`(TEST_IDS))
@@ -68,11 +66,9 @@ class CatFactsIdsViewModelTest {
     @Test
     fun `when fetching data is unsuccessful, Then  activateErrorState is called after activateloadingState`() {
 //        every { repository.getCatFactsIdsRx() } returns Single.error(HttpException(RESPONSE_ERROR))
-//        viewModel = DefaultCatFactsIdsViewModel(
-//            catFactRepository = repository
-//        )
-//
-//        viewModel.fetchData()
+
+        viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
+        viewModel.fetchData()
 
         verify {
         }
@@ -80,28 +76,17 @@ class CatFactsIdsViewModelTest {
 
     @Test
     fun `when fetching data is successful, Then  activate  SuccessState is called after activateloadingState`() {
-//        viewModel = DefaultCatFactsIdsViewModel(
-//            catFactRepository = repository
-//
-//        )
-//
-//        viewModel.fetchData()
-//        TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
-        verify {
+        viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
+        coroutineScopeRule.runBlockingTest {
+            viewModel.fetchData()
+
+            verify {
+            }
+
         }
     }
 
 
-    companion object {
-        private val RESPONSE_ERROR =
-            Response.error<CatFact>(404, ResponseBody.create(null, "404 File not Found"))
-        const val ID = "123"
-        val TEST_IDS = listOf<CatFactId>(
-            CatFactId(ID),
-            CatFactId(ID)
-        )
-        val TEST_SCHEDULER = TestScheduler()
-
-    }
+    companion object
 
 }
