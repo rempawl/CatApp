@@ -2,7 +2,7 @@ package com.example.catapp.catFactDetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.catapp.data.CatFact
+import com.example.catapp.data.entities.CatFact
 import com.example.catapp.state.StateModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.example.catapp.data
+package com.example.catapp.data.entities
 
 import com.squareup.moshi.JsonClass
 

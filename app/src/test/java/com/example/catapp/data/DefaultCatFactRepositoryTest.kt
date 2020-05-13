@@ -1,15 +1,9 @@
 package com.example.catapp.data
 
-import com.example.catapp.Utils.TEST_CAT_FACT
-import com.example.catapp.Utils.TEST_CAT_FACT_MAPPED
-import com.example.catapp.Utils.TEST_ID
-import com.example.catapp.Utils.TEST_IDS
+import com.example.catapp.data.repository.DefaultCatFactRepository
 import com.example.catapp.network.CatFactsApi
 import io.mockk.MockKAnnotations
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.reactivex.Single
-import kotlinx.coroutines.Deferred
 import org.junit.Before
 import org.junit.Test
 
@@ -22,7 +16,9 @@ class DefaultCatFactRepositoryTest{
     @Before
     fun setUp(){
         MockKAnnotations.init(this)
-        repository = DefaultCatFactRepository(catFactsApi)
+        repository = DefaultCatFactRepository(
+            catFactsApi
+        )
     }
 
     @Test

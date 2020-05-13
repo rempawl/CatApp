@@ -3,11 +3,12 @@ package com.example.catapp.catFactDetails
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.catapp.data.CatFact
-import com.example.catapp.data.CatFactRepository
+import com.example.catapp.data.entities.CatFact
+import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.data.Result
 import com.example.catapp.data.errorModel.ErrorModel
-import com.example.catapp.data.formatUpdateDate
+import com.example.catapp.data.entities.formatUpdateDate
+import com.example.catapp.utils.providers.DispatcherProvider
 import com.example.catapp.utils.subscribers.CoroutineSubscriber
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val catFactRepository: CatFactRepository,
     @Assisted private val factId: String,
-    private val errorModel: ErrorModel
+    private val errorModel: ErrorModel,
+    private val dispatcherProvider: DispatcherProvider
 ) : CatFactDetailsViewModel(), CoroutineSubscriber<CatFact> {
 
     @AssistedInject.Factory
@@ -45,11 +47,11 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     }
 
     fun fetchData() {
-        _state.postValue(Result.Loading)
+        viewModelScope.launch(dispatcherProvider.provideMainDispatcher()) {
+            _state.postValue(Result.Loading)
 
-        val data = catFactRepository.getCatFactAsync(factId)
+            val data = catFactRepository.getCatFactAsync(factId)
 
-        viewModelScope.launch {
             subscribeData(data)
         }
     }

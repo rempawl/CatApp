@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.catapp.data.CatFactId
+import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.databinding.CatFactsListItemBinding
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject

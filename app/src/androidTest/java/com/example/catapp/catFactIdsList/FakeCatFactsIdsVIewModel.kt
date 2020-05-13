@@ -3,7 +3,7 @@ package com.example.catapp.catFactIdsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
-import com.example.catapp.data.CatFactId
+import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.state.StateModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,9 +41,12 @@ class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(state
             }else {
                 stateModel.activateLoadingState()
                 delay(1000)
-                _fakeFactsIds.postValue(listOf(CatFactId(ID_1), CatFactId(
-                    ID_2
-                )))
+                _fakeFactsIds.postValue(listOf(
+                    CatFactId(ID_1),
+                    CatFactId(
+                        ID_2
+                    )
+                ))
                 stateModel.activateSuccessState()
             }
 

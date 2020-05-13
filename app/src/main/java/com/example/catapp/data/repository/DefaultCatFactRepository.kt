@@ -1,5 +1,8 @@
-package com.example.catapp.data
+package com.example.catapp.data.repository
 
+import com.example.catapp.data.entities.CatFact
+import com.example.catapp.data.entities.CatFactId
+import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.network.CatFactsApi
 import kotlinx.coroutines.Deferred
 import javax.inject.Inject

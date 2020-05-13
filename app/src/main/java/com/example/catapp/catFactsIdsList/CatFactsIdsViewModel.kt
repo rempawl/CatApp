@@ -2,7 +2,7 @@ package com.example.catapp.catFactsIdsList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.catapp.data.CatFactId
+import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.data.Result
 
 

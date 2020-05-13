@@ -1,9 +1,9 @@
 package com.example.catapp.catFactsIdsList
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.data.CatFact
-import com.example.catapp.data.CatFactId
-import com.example.catapp.data.CatFactRepository
+import com.example.catapp.data.entities.CatFact
+import com.example.catapp.data.entities.CatFactId
+import com.example.catapp.data.repository.CatFactRepository
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
@@ -96,7 +96,10 @@ class CatFactsIdsViewModelTest {
         private val RESPONSE_ERROR =
             Response.error<CatFact>(404, ResponseBody.create(null, "404 File not Found"))
         const val ID = "123"
-        val TEST_IDS = listOf<CatFactId>(CatFactId(ID), CatFactId(ID))
+        val TEST_IDS = listOf<CatFactId>(
+            CatFactId(ID),
+            CatFactId(ID)
+        )
         val TEST_SCHEDULER = TestScheduler()
 
     }

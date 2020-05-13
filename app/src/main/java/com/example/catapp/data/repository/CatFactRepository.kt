@@ -1,6 +1,8 @@
-package com.example.catapp.data
+package com.example.catapp.data.repository
 
 
+import com.example.catapp.data.entities.CatFact
+import com.example.catapp.data.entities.CatFactId
 import kotlinx.coroutines.Deferred
 
 interface CatFactRepository {

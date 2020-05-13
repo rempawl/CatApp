@@ -3,17 +3,19 @@ package com.example.catapp.catFactsIdsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.catapp.data.CatFactId
-import com.example.catapp.data.CatFactRepository
+import com.example.catapp.data.entities.CatFactId
+import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.data.Result
 import com.example.catapp.data.errorModel.ErrorModel
+import com.example.catapp.utils.providers.DispatcherProvider
 import com.example.catapp.utils.subscribers.CoroutineSubscriber
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DefaultCatFactsIdsViewModel @Inject constructor(
     private val catFactRepository: CatFactRepository,
-    private val errorModel: ErrorModel
+    private val errorModel: ErrorModel,
+    private val dispatcherProvider: DispatcherProvider
 
 ) : CatFactsIdsViewModel(),
     CoroutineSubscriber<List<CatFactId>> {
@@ -41,7 +43,7 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
         _result.value = (Result.Loading)
 
         val data = catFactRepository.getCatFactsIdsAsync()
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcherProvider.provideMainDispatcher()) {
             subscribeData(data)
         }
 

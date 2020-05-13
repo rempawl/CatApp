@@ -12,7 +12,7 @@
 
         <variable
             name="catFact"
-            type="com.example.catapp.data.CatFact" />
+            type="com.example.catapp.data.entities.CatFact" />
     </data>
 
     <FrameLayout

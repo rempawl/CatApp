@@ -6,7 +6,7 @@
 
         <variable
             name="catFactId"
-            type="com.example.catapp.data.CatFactId" />
+            type="com.example.catapp.data.entities.CatFactId" />
     </data>
 
     <androidx.cardview.widget.CardView

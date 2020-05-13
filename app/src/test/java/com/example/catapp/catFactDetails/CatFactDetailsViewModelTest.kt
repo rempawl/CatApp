@@ -1,9 +1,9 @@
 package com.example.catapp.catFactDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.data.CatFact
-import com.example.catapp.data.CatFactRepository
-import com.example.catapp.data.formatUpdateDate
+import com.example.catapp.data.entities.CatFact
+import com.example.catapp.data.repository.CatFactRepository
+import com.example.catapp.data.entities.formatUpdateDate
 import com.example.catapp.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -100,7 +100,8 @@ class CatFactDetailsViewModelTest {
         const val ID = "123"
         private val TEST_SCHEDULER = TestScheduler()
 
-        val TEST_CAT_FACT = CatFact("test", "09-04-2020")
+        val TEST_CAT_FACT =
+            CatFact("test", "09-04-2020")
 
         val TEST_CAT_FACT_MAPPED = TEST_CAT_FACT.copy(updatedAt = TEST_CAT_FACT.formatUpdateDate())
     }
