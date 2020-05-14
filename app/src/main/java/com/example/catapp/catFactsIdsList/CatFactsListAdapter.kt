@@ -16,7 +16,7 @@ class CatFactsListAdapter @AssistedInject constructor(
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(clickListener: (CatFactId) -> Unit): CatFactsListAdapter
+        fun create(onItemClickListener: (CatFactId) -> Unit): CatFactsListAdapter
     }
 
     inner class CatFactViewHolder(private val binding: CatFactsListItemBinding) :
