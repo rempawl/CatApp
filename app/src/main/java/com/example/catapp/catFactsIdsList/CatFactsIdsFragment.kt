@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.data.Result
+import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.utils.ConfirmDialogFragment
@@ -27,21 +28,19 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         const val SPAN_COUNT: Int = 2
     }
 
-
     val viewModel: CatFactsIdsViewModel by viewModel {
         injectViewModel()
     }
-
+    private val appComponent by lazy {
+        (activity as MainActivity).appComponent
+    }
 
     @Inject
     lateinit var catFactListAdapterFactory: CatFactsListAdapter.Factory
     private val catFactsListAdapter: CatFactsListAdapter by lazy {
-        catFactListAdapterFactory.create { factId ->
-            findNavController().navigate(
-                CatFactsIdsFragmentDirections
-                    .navigationCatListFragmentToNavigationCatFactDetails(factId._id)
-            )
-        }
+        catFactListAdapterFactory.create(onItemClickListener = { factId ->
+            navigateToFactDetails(factId)
+            })
     }
 
     private var binding: CatFactsIdsFragmentBinding? = null
@@ -112,16 +111,23 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
 
     }
 
+
     protected open fun injectViewModel(): CatFactsIdsViewModel =
-        (activity as MainActivity).appComponent.catFactsIdsViewModel
+        appComponent.catFactsIdsViewModel
 
     protected open fun injectMembers() {
-        (activity as MainActivity).appComponent.inject(this)
+        appComponent.inject(this)
     }
 
     override fun onConfirm() {
         viewModel.refresh()
     }
 
+    private fun navigateToFactDetails(factId: CatFactId) {
+        findNavController().navigate(
+            CatFactsIdsFragmentDirections
+                .navigationCatListFragmentToNavigationCatFactDetails(factId._id)
+        )
+    }
 
 }

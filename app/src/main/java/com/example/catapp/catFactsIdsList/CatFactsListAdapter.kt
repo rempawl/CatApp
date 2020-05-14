@@ -11,12 +11,12 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 
 class CatFactsListAdapter @AssistedInject constructor(
-    @Assisted private val clickListener: (CatFactId) -> Unit
+    @Assisted private val onItemClickListener: (CatFactId) -> Unit
 ) : ListAdapter<CatFactId, CatFactsListAdapter.CatFactViewHolder>(CatFactDiffCallBack()) {
 
     @AssistedInject.Factory
     interface Factory {
-        fun create(clickListener: (CatFactId) -> Unit): CatFactsListAdapter
+        fun create(onItemClickListener: (CatFactId) -> Unit): CatFactsListAdapter
     }
 
     inner class CatFactViewHolder(private val binding: CatFactsListItemBinding) :
@@ -25,7 +25,7 @@ class CatFactsListAdapter @AssistedInject constructor(
         fun bind(catFactId: CatFactId) {
             binding.apply {
                 this.catFactId = catFactId
-                container.setOnClickListener { clickListener(catFactId) }
+                container.setOnClickListener { onItemClickListener(catFactId) }
                 executePendingBindings()
             }
         }
