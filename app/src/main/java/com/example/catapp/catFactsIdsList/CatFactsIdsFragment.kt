@@ -28,9 +28,10 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         const val SPAN_COUNT: Int = 2
     }
 
-    val viewModel: CatFactsIdsViewModel by viewModel {
+    private val viewModel: CatFactsIdsViewModel by viewModel {
         injectViewModel()
     }
+
     private val appComponent by lazy {
         (activity as MainActivity).appComponent
     }
@@ -40,7 +41,7 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
     private val catFactsListAdapter: CatFactsListAdapter by lazy {
         catFactListAdapterFactory.create(onItemClickListener = { factId ->
             navigateToFactDetails(factId)
-            })
+        })
     }
 
     private var binding: CatFactsIdsFragmentBinding? = null
