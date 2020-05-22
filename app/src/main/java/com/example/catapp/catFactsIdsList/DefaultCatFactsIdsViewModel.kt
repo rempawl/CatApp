@@ -15,9 +15,9 @@ import javax.inject.Inject
 class DefaultCatFactsIdsViewModel @Inject constructor(
     private val catFactRepository: CatFactRepository,
     private val errorModel: ErrorModel,
-    private val dispatcherProvider: DispatcherProvider
+     dispatcherProvider: DispatcherProvider
 
-) : CatFactsIdsViewModel(),
+) : CatFactsIdsViewModel(dispatcherProvider),
     CoroutineSubscriber<List<CatFactId>> {
 
 

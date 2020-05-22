@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
 import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.state.StateModel
+import com.example.catapp.utils.providers.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FakeFactsIdsViewModel(stateModel: StateModel) : CatFactsIdsViewModel(stateModel) {
+class FakeFactsIdsViewModel(dispatcherProvider: DispatcherProvider) : CatFactsIdsViewModel(dispatcherProvider) {
     companion object {
         const val ID_1 = "123"
         const val ID_2 = "345"

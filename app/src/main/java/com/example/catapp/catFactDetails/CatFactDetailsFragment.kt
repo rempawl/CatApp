@@ -57,9 +57,7 @@ open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmC
     private fun setUpObservers() {
         viewModel.result.observe(viewLifecycleOwner, Observer { res ->
             if (res is Result.Error) showErrorDialog(res.message)
-        })
-        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
-            if (result is Result.Success) setUpText(result.data as CatFact)
+            else if (res is Result.Success) setUpText(res.data as CatFact)
         })
     }
 

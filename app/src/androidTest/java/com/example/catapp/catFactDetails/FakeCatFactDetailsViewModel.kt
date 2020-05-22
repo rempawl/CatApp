@@ -2,15 +2,14 @@ package com.example.catapp.catFactDetails
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.catapp.data.Result
 import com.example.catapp.data.entities.CatFact
-import com.example.catapp.state.StateModel
+import com.example.catapp.utils.providers.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
-    CatFactDetailsViewModel(stateModel) {
+class FakeCatFactDetailsViewModel(dispatcherProvider: DispatcherProvider) :
+    CatFactDetailsViewModel(dispatcherProvider) {
 
     companion object {
         val FAKE_FACT = CatFact("TEXT", "DATE")
@@ -18,33 +17,23 @@ class FakeCatFactDetailsViewModel constructor(stateModel: StateModel) :
 
     }
 
-    private val _catFactDetail = MutableLiveData<CatFact>()
-    override val catFactDetail: LiveData<CatFact>
-        get() = _catFactDetail
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val coroutineScope = CoroutineScope(dispatcherProvider.provideMainDispatcher())
 
-
-    override fun refresh() {
-
-    }
 
     init {
         coroutineScope.launch {
 
-            if (shouldMockError) {
-                mockError()
-            } else {
-                stateModel.activateLoadingState()
-                delay(1000)
-                _catFactDetail.value = FAKE_FACT
-                stateModel.activateSuccessState()
-            }
         }
     }
 
-    private fun mockError() {
-        stateModel.activateErrorState()
+
+    private val _result = MutableLiveData<Result<*>>()
+    override val result: LiveData<Result<*>>
+        get() = _result
+
+    override fun fetchData() {
+        TODO("")
     }
 
 }

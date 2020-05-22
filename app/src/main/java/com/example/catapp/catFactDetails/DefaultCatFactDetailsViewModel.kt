@@ -13,14 +13,15 @@ import com.example.catapp.utils.subscribers.CoroutineSubscriber
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 
 
 class DefaultCatFactDetailsViewModel @AssistedInject constructor(
     private val catFactRepository: CatFactRepository,
     @Assisted private val factId: String,
     private val errorModel: ErrorModel,
-    private val dispatcherProvider: DispatcherProvider
-) : CatFactDetailsViewModel(), CoroutineSubscriber<CatFact> {
+     dispatcherProvider: DispatcherProvider
+) : CatFactDetailsViewModel(dispatcherProvider), CoroutineSubscriber<CatFact> {
 
     @AssistedInject.Factory
     interface Factory {
@@ -41,8 +42,9 @@ class DefaultCatFactDetailsViewModel @AssistedInject constructor(
         viewModelScope.launch(dispatcherProvider.provideMainDispatcher()) {
             _result.postValue(Result.Loading)
 
-            val data = catFactRepository.getCatFactAsync(factId)
-
+            val data = withTimeout(5_000) {
+                catFactRepository.getCatFactAsync(factId)
+            }
             subscribeData(data)
         }
     }

@@ -13,7 +13,6 @@ import com.example.catapp.R
 import com.example.catapp.catFactIdsList.FakeFactsIdsViewModel.Companion.shouldMockError
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
 import com.example.catapp.catFactsIdsList.CatFactsListAdapter
-import com.example.catapp.state.DefaultStateModel
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
@@ -70,7 +69,7 @@ todo
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
 
         shouldMockError = true
-        viewModel = FakeFactsIdsViewModel(DefaultStateModel())
+        viewModel = FakeFactsIdsViewModel()
         TestCatFactsIdsIdsFragment.testViewModel = viewModel
 
         fragmentScenario =
@@ -86,7 +85,7 @@ todo
     @Test
     fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingLayoutIsDisplayed() {
         shouldMockError = false
-        viewModel = spyk(FakeFactsIdsViewModel(DefaultStateModel()))
+        viewModel = spyk(FakeFactsIdsViewModel())
         TestCatFactsIdsIdsFragment.testViewModel = viewModel
 
         fragmentScenario =

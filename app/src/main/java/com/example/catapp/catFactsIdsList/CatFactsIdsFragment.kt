@@ -75,12 +75,9 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
     @Suppress("UNCHECKED_CAST")
     private fun setUpObservers() {
         viewModel.result.observe(viewLifecycleOwner, Observer { result ->
-            if(result is Result.Success){
+            if (result is Result.Success<*>)
                 catFactsListAdapter.submitList(result.data as List<CatFactId>)
-            }
-        })
-        viewModel.result.observe(viewLifecycleOwner, Observer { res ->
-            if (res is Result.Error) showErrorDialog(res.message)
+            else if (result is Result.Error) showErrorDialog(result.message)
         })
     }
 

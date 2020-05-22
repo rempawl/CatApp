@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class ErrorModelImpl @Inject constructor(private val resourcesProvider: ResourcesProvider) :
     ErrorModel {
+
     override fun getErrorMessage(exception: Throwable): String {
         return when (exception) {
             is HttpException -> getCodeMessage(exception.code())

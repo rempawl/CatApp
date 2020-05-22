@@ -1,18 +1,20 @@
 package com.example.catapp.catFactDetails
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.catapp.data.Result
+import com.example.catapp.data.entities.CatFact
 import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.testUtils.CoroutineScopeRule
 import com.example.catapp.testUtils.TestDispatchersProvider
+import com.example.catapp.testUtils.Utils
+import com.example.catapp.testUtils.Utils.RESPONSE_ERROR_404
 import com.example.catapp.testUtils.Utils.TEST_CAT_FACT
 import com.example.catapp.testUtils.Utils.TEST_CAT_FACT_MAPPED
 import com.example.catapp.testUtils.Utils.TEST_ID
 import com.example.catapp.testUtils.getOrAwaitValue
-import io.mockk.MockKAnnotations
-import io.mockk.coEvery
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
@@ -49,12 +51,12 @@ class CatFactDetailsViewModelTest {
 
 
     @Test
-    fun `when CatRepository returns error ,Then isError is set to  true`() {
+    fun `when CatRepository returns error ,then result is Error`() {
+        every { errorModel.getErrorMessage(RESPONSE_ERROR_404) } returns Utils.ERROR_TEXT
 
         viewModel =
             DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
-
-
+        //todo
     }
 
     @Test
@@ -64,31 +66,20 @@ class CatFactDetailsViewModelTest {
         viewModel =
             DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
         coroutineScopeRule.runBlockingTest {
+
             viewModel.fetchData()
 
-            val data = viewModel.catFactDetail.getOrAwaitValue()
-//        val result = viewModel.result.getOrAwaitValue() as Result.Success
+            val data = viewModel.result.getOrAwaitValue()
+            assert(data is Result.Success)
+            val catFact = (data as Result.Success).data as CatFact
 
-            assertThat(data, `is`(TEST_CAT_FACT_MAPPED))
-//        assertThat(result,`is`(Result.Success(data)))
+            assertThat(catFact, `is`(TEST_CAT_FACT_MAPPED))
         }
     }
 
-    @Test
-    fun `when fetching data is unsuccessful, Then  activateErrorState is called after activateloadingState`() {
-//        every { repository.getCatFactRx(ID) } returns Single.error(HttpException(RESPONSE_ERROR))
-//        val spyModel = spyk(DefaultStateModel())
-        viewModel =
-            DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
-
-        viewModel.fetchData()
-
-        verify {
-        }
-    }
 
     @Test
-    fun `when fetching data is successful, Then  activate  SuccessState is called after activateloadingState`() {
+    fun `when fetching data is successful, `() {
 //        every { repository.getCatFactRx(ID) } returns Single.just(TEST_CAT_FACT)
         viewModel =
             DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
