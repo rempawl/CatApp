@@ -5,13 +5,17 @@ import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.testUtils.CoroutineScopeRule
 import com.example.catapp.testUtils.TestDispatchersProvider
+import com.example.catapp.testUtils.Utils.TEST_CAT_FACT
 import com.example.catapp.testUtils.Utils.TEST_CAT_FACT_MAPPED
 import com.example.catapp.testUtils.Utils.TEST_ID
 import com.example.catapp.testUtils.getOrAwaitValue
 import io.mockk.MockKAnnotations
+import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -41,14 +45,12 @@ class CatFactDetailsViewModelTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-
     }
 
 
     @Test
     fun `when CatRepository returns error ,Then isError is set to  true`() {
 
-//        every { repository.getCatFactAsync(TEST_ID) } returns
         viewModel =
             DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
 
@@ -56,15 +58,20 @@ class CatFactDetailsViewModelTest {
     }
 
     @Test
-    fun `when CatRepository returns TEST_CAT_FACT_MAPPED, then catFactDetails value is TEST_CAT_FACT_MAPPED`() {
-//        every { repository.getCatFactRx(ID) } returns Single.just(TEST_CAT_FACT_MAPPED)
+    fun `when CatRepository returns TEST_CAT_FACT, then catFactDetails value is TEST_CAT_FACT_MAPPED and result is success`() {
+        coEvery { repository.getCatFactAsync(TEST_ID) } returns CompletableDeferred(TEST_CAT_FACT)
+
         viewModel =
             DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
+        coroutineScopeRule.runBlockingTest {
+            viewModel.fetchData()
 
-        viewModel.fetchData()
+            val data = viewModel.catFactDetail.getOrAwaitValue()
+//        val result = viewModel.result.getOrAwaitValue() as Result.Success
 
-        val data = viewModel.catFactDetail.getOrAwaitValue()
-        assertThat(data, `is`(TEST_CAT_FACT_MAPPED))
+            assertThat(data, `is`(TEST_CAT_FACT_MAPPED))
+//        assertThat(result,`is`(Result.Success(data)))
+        }
     }
 
     @Test

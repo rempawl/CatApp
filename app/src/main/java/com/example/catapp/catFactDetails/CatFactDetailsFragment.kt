@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.data.Result
+import com.example.catapp.data.entities.CatFact
 import com.example.catapp.databinding.CatFactDetailsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.utils.ConfirmDialogFragment
@@ -28,43 +29,59 @@ open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmC
         injectViewModel()
     }
 
+    private var binding: CatFactDetailsFragmentBinding? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val binding = CatFactDetailsFragmentBinding
-            .inflate(inflater, container, false)
+        binding = CatFactDetailsFragmentBinding.inflate(inflater, container, false)
 
         setUpObservers()
-        setUpBinding(binding)
+        setUpBinding()
 
-        return binding.root
+        return binding!!.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     override fun onConfirm() {
-        viewModel.refresh()
+        viewModel.fetchData()
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun setUpObservers() {
         viewModel.result.observe(viewLifecycleOwner, Observer { res ->
             if (res is Result.Error) showErrorDialog(res.message)
         })
+        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
+            if (result is Result.Success) setUpText(result.data as CatFact)
+        })
+    }
+
+    private fun setUpText(catFact: CatFact) {
+        binding!!.apply {
+            factText.text = getString(R.string.fact_text, catFact.text)
+            updateDate.text = getString(R.string.update_date, catFact.updatedAt)
+        }
     }
 
     private fun showErrorDialog(message: String) {
         ConfirmDialogFragment(
-            title =  getString(R.string.error_msg) ,
+            title = getString(R.string.error_msg),
             positiveText = getString(R.string.try_again),
             listener = this,
             message = message
         ).show(childFragmentManager, "")
     }
 
-    private fun setUpBinding(binding: CatFactDetailsFragmentBinding) {
-        binding.viewModel = this.viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun setUpBinding() {
+        binding!!.viewModel = this.viewModel
+        binding!!.lifecycleOwner = viewLifecycleOwner
 
     }
 

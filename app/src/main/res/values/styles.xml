@@ -13,6 +13,8 @@
         <item name="android:textSize">25sp</item>
     </style>
 
+
+
     <style name="DefaultCardViewStyle" parent="Widget.MaterialComponents.CardView">
         <item name="android:layout_margin">10dp</item>
         <item name="cardCornerRadius">10dp</item>

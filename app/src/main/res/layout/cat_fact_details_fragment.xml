@@ -51,10 +51,9 @@
                     android:textAppearance="@style/DefaultBodyTextAppearance"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:text="@{@string/fact_text(viewModel.catFactDetail.text)}" />
+                    />
 
                 <TextView
-                    android:text="@{@string/update_date(viewModel.catFactDetail.updatedAt)}"
                     android:id="@+id/update_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

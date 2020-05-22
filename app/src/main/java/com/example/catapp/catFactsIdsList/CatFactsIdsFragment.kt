@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.data.Result
+import com.example.catapp.data.entities.CatFact
 import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
@@ -71,9 +72,12 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         binding = null
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun setUpObservers() {
-        viewModel.factsIds.observe(viewLifecycleOwner, Observer { factsIdsList ->
-            catFactsListAdapter.submitList(factsIdsList)
+        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
+            if(result is Result.Success){
+                catFactsListAdapter.submitList(result.data as List<CatFactId>)
+            }
         })
         viewModel.result.observe(viewLifecycleOwner, Observer { res ->
             if (res is Result.Error) showErrorDialog(res.message)
@@ -121,7 +125,7 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
     }
 
     override fun onConfirm() {
-        viewModel.refresh()
+        viewModel.fetchData()
     }
 
     private fun navigateToFactDetails(factId: CatFactId) {

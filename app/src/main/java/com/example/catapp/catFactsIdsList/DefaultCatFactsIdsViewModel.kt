@@ -3,10 +3,10 @@ package com.example.catapp.catFactsIdsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.catapp.data.entities.CatFactId
-import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.data.Result
+import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.data.errorModel.ErrorModel
+import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.utils.providers.DispatcherProvider
 import com.example.catapp.utils.subscribers.CoroutineSubscriber
 import kotlinx.coroutines.launch
@@ -20,26 +20,17 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
 ) : CatFactsIdsViewModel(),
     CoroutineSubscriber<List<CatFactId>> {
 
-    private val _factsIds = MutableLiveData<List<CatFactId>>()
 
     private val _result = MutableLiveData<Result<*>>()
     override val result: LiveData<Result<*>>
         get() = _result
 
-    override val factsIds: LiveData<List<CatFactId>>
-        get() = _factsIds
-
-
-    override fun refresh() {
-        _factsIds.value = null
-        fetchData()
-    }
 
     init {
         fetchData()
     }
 
-    fun fetchData() {
+    override fun fetchData() {
         _result.value = (Result.Loading)
 
         val data = catFactRepository.getCatFactsIdsAsync()
@@ -55,7 +46,6 @@ class DefaultCatFactsIdsViewModel @Inject constructor(
     }
 
     override fun onSuccess(result: List<CatFactId>) {
-        _factsIds.value = (result)
         _result.value = (Result.Success(result))
     }
 
