@@ -5,14 +5,14 @@ import com.example.catapp.data.Result
 import com.example.catapp.data.entities.CatFact
 import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.repository.CatFactRepository
-import com.example.catapp.testUtils.CoroutineScopeRule
-import com.example.catapp.testUtils.TestDispatchersProvider
-import com.example.catapp.testUtils.Utils
-import com.example.catapp.testUtils.Utils.RESPONSE_ERROR_404
-import com.example.catapp.testUtils.Utils.TEST_CAT_FACT
-import com.example.catapp.testUtils.Utils.TEST_CAT_FACT_MAPPED
-import com.example.catapp.testUtils.Utils.TEST_ID
-import com.example.catapp.testUtils.getOrAwaitValue
+import com.example.catapp.utils.CoroutineScopeRule
+import com.example.catapp.utils.TestDispatchersProvider
+import com.example.catapp.utils.Utils
+import com.example.catapp.utils.Utils.RESPONSE_ERROR_404
+import com.example.catapp.utils.Utils.TEST_CAT_FACT
+import com.example.catapp.utils.Utils.TEST_CAT_FACT_MAPPED
+import com.example.catapp.utils.Utils.TEST_ID_1
+import com.example.catapp.utils.getOrAwaitValue
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.CompletableDeferred
@@ -27,13 +27,15 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 class CatFactDetailsViewModelTest {
 
-    private val dispatchersProvider = TestDispatchersProvider()
+    private val dispatchersProvider =
+        TestDispatchersProvider()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val coroutineScopeRule = CoroutineScopeRule(dispatchersProvider.dispatcher)
+    val coroutineScopeRule =
+        CoroutineScopeRule(dispatchersProvider.dispatcher)
 
     @MockK
     lateinit var repository: CatFactRepository
@@ -55,16 +57,16 @@ class CatFactDetailsViewModelTest {
         every { errorModel.getErrorMessage(RESPONSE_ERROR_404) } returns Utils.ERROR_TEXT
 
         viewModel =
-            DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
+            DefaultCatFactDetailsViewModel(repository, TEST_ID_1, errorModel, dispatchersProvider)
         //todo
     }
 
     @Test
     fun `when CatRepository returns TEST_CAT_FACT, then catFactDetails value is TEST_CAT_FACT_MAPPED and result is success`() {
-        coEvery { repository.getCatFactAsync(TEST_ID) } returns CompletableDeferred(TEST_CAT_FACT)
+        coEvery { repository.getCatFactAsync(TEST_ID_1) } returns CompletableDeferred(TEST_CAT_FACT)
 
         viewModel =
-            DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
+            DefaultCatFactDetailsViewModel(repository, TEST_ID_1, errorModel, dispatchersProvider)
         coroutineScopeRule.runBlockingTest {
 
             viewModel.fetchData()
@@ -82,7 +84,7 @@ class CatFactDetailsViewModelTest {
     fun `when fetching data is successful, `() {
 //        every { repository.getCatFactRx(ID) } returns Single.just(TEST_CAT_FACT)
         viewModel =
-            DefaultCatFactDetailsViewModel(repository, TEST_ID, errorModel, dispatchersProvider)
+            DefaultCatFactDetailsViewModel(repository, TEST_ID_1, errorModel, dispatchersProvider)
 
         verify {
         }

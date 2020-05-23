@@ -5,10 +5,10 @@ import com.example.catapp.data.Result
 import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.repository.CatFactRepository
-import com.example.catapp.testUtils.CoroutineScopeRule
-import com.example.catapp.testUtils.TestDispatchersProvider
-import com.example.catapp.testUtils.Utils.TEST_IDS
-import com.example.catapp.testUtils.getOrAwaitValue
+import com.example.catapp.utils.CoroutineScopeRule
+import com.example.catapp.utils.TestDispatchersProvider
+import com.example.catapp.utils.Utils.TEST_IDS
+import com.example.catapp.utils.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
@@ -26,13 +26,15 @@ import org.junit.Test
 class CatFactsIdsViewModelTest {
 
 
-    private val dispatchersProvider = TestDispatchersProvider()
+    private val dispatchersProvider =
+        TestDispatchersProvider()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @get:Rule
-    val coroutineScopeRule = CoroutineScopeRule(dispatchersProvider.dispatcher)
+    val coroutineScopeRule =
+        CoroutineScopeRule(dispatchersProvider.dispatcher)
 
     @MockK
     lateinit var repository: CatFactRepository

@@ -7,17 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.databinding.CatFactsListItemBinding
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
 
-class CatFactsListAdapter @AssistedInject constructor(
-    @Assisted private val onItemClickListener: (CatFactId) -> Unit
+class CatFactsListAdapter constructor(
+    private val onItemClickListener: (CatFactId) -> Unit
 ) : ListAdapter<CatFactId, CatFactsListAdapter.CatFactViewHolder>(CatFactDiffCallBack()) {
 
-    @AssistedInject.Factory
-    interface Factory {
-        fun create(onItemClickListener: (CatFactId) -> Unit): CatFactsListAdapter
-    }
 
     inner class CatFactViewHolder(private val binding: CatFactsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

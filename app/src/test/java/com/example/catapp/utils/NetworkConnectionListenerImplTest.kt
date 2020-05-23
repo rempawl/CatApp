@@ -1,7 +1,6 @@
 package com.example.catapp.utils
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.catapp.testUtils.getOrAwaitValue
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before

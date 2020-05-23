@@ -8,7 +8,7 @@ class TestCatFactsIdsIdsFragment : CatFactsIdsFragment() {
     override fun injectViewModel(): CatFactsIdsViewModel = testViewModel
 
     override fun injectMembers() {
-        this.catFactsListAdapter = testAdapter
+        //todo
     }
 
     companion object {

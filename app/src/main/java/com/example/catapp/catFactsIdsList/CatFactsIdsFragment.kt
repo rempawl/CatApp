@@ -14,12 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.catapp.MainActivity
 import com.example.catapp.R
 import com.example.catapp.data.Result
-import com.example.catapp.data.entities.CatFact
 import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.databinding.CatFactsIdsFragmentBinding
 import com.example.catapp.di.viewModel
 import com.example.catapp.utils.ConfirmDialogFragment
-import javax.inject.Inject
 
 
 open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClickListener {
@@ -37,10 +35,9 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         (activity as MainActivity).appComponent
     }
 
-    @Inject
-    lateinit var catFactListAdapterFactory: CatFactsListAdapter.Factory
     private val catFactsListAdapter: CatFactsListAdapter by lazy {
-        catFactListAdapterFactory.create(onItemClickListener = { factId ->
+
+        CatFactsListAdapter(onItemClickListener = { factId ->
             navigateToFactDetails(factId)
         })
     }

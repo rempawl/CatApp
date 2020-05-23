@@ -3,59 +3,42 @@ package com.example.catapp.catFactIdsList
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
+import com.example.catapp.data.Result
 import com.example.catapp.data.entities.CatFactId
-import com.example.catapp.state.StateModel
+import com.example.catapp.utils.Utils
 import com.example.catapp.utils.providers.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FakeFactsIdsViewModel(dispatcherProvider: DispatcherProvider) : CatFactsIdsViewModel(dispatcherProvider) {
+class FakeFactsIdsViewModel(dispatcherProvider: DispatcherProvider) :
+    CatFactsIdsViewModel(dispatcherProvider) {
     companion object {
-        const val ID_1 = "123"
-        const val ID_2 = "345"
         var shouldMockError = true
     }
 
     private val _fakeFactsIds = MutableLiveData<List<CatFactId>>()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private val coroutineScope = CoroutineScope(dispatcherProvider.provideMainDispatcher())
 
-    override val factsIds: LiveData<List<CatFactId>>
-        get() = _fakeFactsIds
+    private val _result = MutableLiveData<Result<*>>()
+    override val result: LiveData<Result<*>>
+        get() = _result
 
 
-
-    override fun refresh() {
+    override fun fetchData() {
         coroutineScope.launch {
-            stateModel.activateLoadingState()
+            _result.value = Result.Loading
             delay(1000)
-            stateModel.activateSuccessState()
+            _result.value =
+                if (shouldMockError) Result.Error("todo") else Result.Success(Utils.TEST_IDS)
+
         }
     }
 
     init {
-        coroutineScope.launch {
-            if(shouldMockError) {
-                mockError()
-            }else {
-                stateModel.activateLoadingState()
-                delay(1000)
-                _fakeFactsIds.postValue(listOf(
-                    CatFactId(ID_1),
-                    CatFactId(
-                        ID_2
-                    )
-                ))
-                stateModel.activateSuccessState()
-            }
-
-        }
+        fetchData()
     }
 
-    private fun mockError() {
-        stateModel.activateErrorState()
-    }
 
 }

@@ -13,20 +13,25 @@ import com.example.catapp.R
 import com.example.catapp.catFactIdsList.FakeFactsIdsViewModel.Companion.shouldMockError
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
 import com.example.catapp.catFactsIdsList.CatFactsListAdapter
+import com.example.catapp.utils.TestDispatchersProvider
+import com.example.catapp.utils.providers.DispatcherProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
 import io.mockk.spyk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class CatFactsIdsFragmentTest {
 
     @MockK
     lateinit var navController: NavController
 
+    private val dispatcherProvider: DispatcherProvider = TestDispatchersProvider()
     private lateinit var viewModel: CatFactsIdsViewModel
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactsIdsIdsFragment>
 
@@ -36,7 +41,7 @@ class CatFactsIdsFragmentTest {
         MockKAnnotations.init(this)
 
         TestCatFactsIdsIdsFragment.testAdapter =
-            CatFactsListAdapter()
+            CatFactsListAdapter {}
 
     }
 
@@ -69,7 +74,7 @@ todo
     fun whenErrorOccursWhileFetchingData_ThenErrorViewIsDisplayed() {
 
         shouldMockError = true
-        viewModel = FakeFactsIdsViewModel()
+        viewModel = FakeFactsIdsViewModel(dispatcherProvider)
         TestCatFactsIdsIdsFragment.testViewModel = viewModel
 
         fragmentScenario =
@@ -85,7 +90,7 @@ todo
     @Test
     fun whenRefreshBtnIsCLicked_ThenRefreshIsCalledAndLoadingLayoutIsDisplayed() {
         shouldMockError = false
-        viewModel = spyk(FakeFactsIdsViewModel())
+        viewModel = spyk(FakeFactsIdsViewModel(dispatcherProvider))
         TestCatFactsIdsIdsFragment.testViewModel = viewModel
 
         fragmentScenario =
@@ -94,7 +99,7 @@ todo
         Espresso.onView(withId(R.id.refresh_btn)).perform(click())
         Espresso.onView(withId(R.id.loading)).check(matches(isDisplayed()))
 
-        verify { viewModel.refresh() }
+        verify { viewModel.fetchData() }
 
 
     }

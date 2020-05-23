@@ -1,4 +1,4 @@
-package com.example.catapp.testUtils
+package com.example.catapp.utils
 
 import com.example.catapp.utils.providers.DispatcherProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
