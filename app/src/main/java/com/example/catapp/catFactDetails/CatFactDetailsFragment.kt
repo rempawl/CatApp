@@ -22,7 +22,6 @@ open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmC
         fun newInstance() = CatFactDetailsFragment()
     }
 
-
     private val args: CatFactDetailsFragmentArgs by navArgs()
 
     private val viewModel: CatFactDetailsViewModel by viewModel {
@@ -55,13 +54,16 @@ open class CatFactDetailsFragment : Fragment(), ConfirmDialogFragment.OnConfirmC
 
     @Suppress("UNCHECKED_CAST")
     private fun setUpObservers() {
-        viewModel.result.observe(viewLifecycleOwner, Observer { res ->
+        val observer = Observer<Result<*>> { res ->
             if (res is Result.Error) showErrorDialog(res.message)
-            else if (res is Result.Success) setUpText(res.data as CatFact)
-        })
+            else if (res is Result.Success) setUpText(res.data)
+        }
+        viewModel.result.observe(viewLifecycleOwner, observer)
     }
 
-    private fun setUpText(catFact: CatFact) {
+    private fun setUpText(catFact: Any?) {
+        require(catFact is CatFact) { "wrong type of catFact " }
+
         binding!!.apply {
             factText.text = getString(R.string.fact_text, catFact.text)
             updateDate.text = getString(R.string.update_date, catFact.updatedAt)

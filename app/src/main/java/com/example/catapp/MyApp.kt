@@ -3,7 +3,7 @@ package com.example.catapp
 import android.app.Application
 import com.example.catapp.di.AppComponent
 import com.example.catapp.di.DaggerAppComponent
-//TODO state success
+
 //todo tests
 class MyApp : Application() {
     val appComponent: AppComponent by lazy {

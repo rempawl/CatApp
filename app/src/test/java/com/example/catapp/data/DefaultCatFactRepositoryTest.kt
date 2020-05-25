@@ -3,10 +3,10 @@ package com.example.catapp.data
 import com.example.catapp.data.repository.DefaultCatFactRepository
 import com.example.catapp.network.CatFactsApi
 import com.example.catapp.utils.CoroutineScopeRule
-import com.example.catapp.utils.TestDispatchersProvider
-import com.example.catapp.utils.Utils.TEST_CAT_FACT
-import com.example.catapp.utils.Utils.TEST_ID_1
-import com.example.catapp.utils.Utils.TEST_IDS
+import com.example.catapp.fakes.TestDispatcherProvider
+import com.example.catapp.fakes.Utils.TEST_CAT_FACT
+import com.example.catapp.fakes.Utils.TEST_ID_1
+import com.example.catapp.fakes.Utils.TEST_IDS
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -29,7 +29,7 @@ class DefaultCatFactRepositoryTest {
 
 
     private val dispatchersProvider =
-        TestDispatchersProvider()
+        TestDispatcherProvider()
 
     @get:Rule
     val coroutineTestRule =
@@ -45,7 +45,7 @@ class DefaultCatFactRepositoryTest {
 
     @Test
     fun `when catFactsApi returns Deferred(TEST_CAT_FACT) then getCatFact returns Deferred(TEST_CAT_FACT)`() {
-        every { catFactsApi.getCatFact(TEST_ID_1) } returns CompletableDeferred(TEST_CAT_FACT)
+        every { catFactsApi.getCatFactAsync(TEST_ID_1) } returns CompletableDeferred(TEST_CAT_FACT)
 
         coroutineTestRule.runBlockingTest {
             val result = repository.getCatFactAsync(TEST_ID_1)
@@ -58,12 +58,12 @@ class DefaultCatFactRepositoryTest {
 
     @Test
     fun `when catFactsApi returns Deferred(TEST_IDS) then getFactsIds returns Deferred(TEST_IDS)`() {
-        every { catFactsApi.getCatFacts() } returns CompletableDeferred(TEST_IDS)
+        every { catFactsApi.getCatFactsAsync() } returns CompletableDeferred(TEST_IDS)
+
         coroutineTestRule.runBlockingTest {
             val result = repository.getCatFactsIdsAsync()
             val actual = result.await()
             assertThat(actual, `is`(TEST_IDS))
-
         }
 
     }

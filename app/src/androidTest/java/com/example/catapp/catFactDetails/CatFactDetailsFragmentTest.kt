@@ -8,7 +8,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.runner.AndroidJUnit4
 import com.example.catapp.R
-import com.example.catapp.utils.TestDispatchersProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,7 +21,7 @@ class CatFactDetailsFragmentTest {
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactDetailsFragment>
 
 
-    private val dispatchersProvider = TestDispatchersProvider()
+//    private val dispatchersProvider = TestDispatcherProvider() todo
 
 
     @Test
@@ -30,7 +29,7 @@ class CatFactDetailsFragmentTest {
 
         FakeCatFactDetailsViewModel.shouldMockError = true
 
-        viewModel = FakeCatFactDetailsViewModel(dispatchersProvider)
+//        viewModel = FakeCatFactDetailsViewModel()
         TestCatFactDetailsFragment.testViewModel = viewModel
 
         fragmentScenario =

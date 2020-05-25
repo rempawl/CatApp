@@ -1,4 +1,5 @@
-package com.example.catapp.utils
+package com.example.catapp.fakes
+
 
 import com.example.catapp.data.entities.CatFact
 import com.example.catapp.data.entities.CatFactId
@@ -7,7 +8,7 @@ import okhttp3.ResponseBody
 import retrofit2.HttpException
 import retrofit2.Response
 
-object Utils {
+object Utils1 {
     const val TEST_ID_1 = "123"
     const val TEST_ID_2 = "456"
 
@@ -15,18 +16,21 @@ object Utils {
         Response.error<CatFact>(404, ResponseBody.create(null, "404 File not Found"))
     )
     val RESPONSE_ERROR_403 = HttpException(
-        Response.error<CatFact>(403, ResponseBody.create(null, "404 File not Found"))
+        Response.error<CatFact>(403, ResponseBody.create(null, ""))
     )
     val RESPONSE_ERROR_400 = HttpException(
-        Response.error<CatFact>(400, ResponseBody.create(null, "404 File not Found"))
+        Response.error<CatFact>(400, ResponseBody.create(null, ""))
     )
     val RESPONSE_ERROR_500 = HttpException(
-        Response.error<CatFact>(500, ResponseBody.create(null, "404 File not Found"))
+        Response.error<CatFact>(500, ResponseBody.create(null, ""))
     )
 
-    val TEST_IDS = listOf(CatFactId(TEST_ID_1), CatFactId(
-        TEST_ID_2
-    ))
+
+    val TEST_IDS = listOf(
+        CatFactId(TEST_ID_1), CatFactId(
+            TEST_ID_2
+        )
+    )
 
     val TEST_CAT_FACT = CatFact("test", "09-04-2020")
 

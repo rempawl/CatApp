@@ -44,12 +44,6 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
 
     private var binding: CatFactsIdsFragmentBinding? = null
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        injectMembers()
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,13 +63,20 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
         binding = null
     }
 
+    override fun onConfirm() {
+        viewModel.fetchData()
+    }
+
+
     @Suppress("UNCHECKED_CAST")
     private fun setUpObservers() {
-        viewModel.result.observe(viewLifecycleOwner, Observer { result ->
+        val observer = Observer<Result<*>> { result ->
             if (result is Result.Success<*>)
                 catFactsListAdapter.submitList(result.data as List<CatFactId>)
             else if (result is Result.Error) showErrorDialog(result.message)
-        })
+        }
+
+        viewModel.result.observe(viewLifecycleOwner, observer)
     }
 
     private fun showErrorDialog(message: String) {
@@ -103,7 +104,6 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
                     else
                         GridLayoutManager(requireContext(), SPAN_COUNT)
 
-
                 setHasFixedSize(true)
             }
         }
@@ -111,16 +111,8 @@ open class CatFactsIdsFragment : Fragment(), ConfirmDialogFragment.OnConfirmClic
     }
 
 
-    protected open fun injectViewModel(): CatFactsIdsViewModel =
-        appComponent.catFactsIdsViewModel
+    protected open fun injectViewModel(): CatFactsIdsViewModel = appComponent.catFactsIdsViewModel
 
-    protected open fun injectMembers() {
-        appComponent.inject(this)
-    }
-
-    override fun onConfirm() {
-        viewModel.fetchData()
-    }
 
     private fun navigateToFactDetails(factId: CatFactId) {
         findNavController().navigate(

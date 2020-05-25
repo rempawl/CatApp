@@ -7,9 +7,6 @@ import com.example.catapp.catFactsIdsList.CatFactsListAdapter
 class TestCatFactsIdsIdsFragment : CatFactsIdsFragment() {
     override fun injectViewModel(): CatFactsIdsViewModel = testViewModel
 
-    override fun injectMembers() {
-        //todo
-    }
 
     companion object {
         lateinit var testViewModel: CatFactsIdsViewModel

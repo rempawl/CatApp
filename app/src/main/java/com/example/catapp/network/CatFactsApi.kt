@@ -10,8 +10,8 @@ import retrofit2.http.Query
 
 interface CatFactsApi {
     @GET("/facts/random")
-    fun getCatFacts(@Query("amount") amount: Int = FACTS_AMOUNT): Deferred<List<CatFactId>>
+    fun getCatFactsAsync(@Query("amount") amount: Int = FACTS_AMOUNT): Deferred<List<CatFactId>>
 
     @GET("/facts/{id}")
-    fun getCatFact(@Path("id") id: String): Deferred<CatFact>
+    fun getCatFactAsync(@Path("id") id: String): Deferred<CatFact>
 }

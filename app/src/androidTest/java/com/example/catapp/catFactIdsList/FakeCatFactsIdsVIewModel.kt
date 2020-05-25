@@ -5,7 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
 import com.example.catapp.data.Result
 import com.example.catapp.data.entities.CatFactId
-import com.example.catapp.utils.Utils
+import com.example.catapp.fakes.Utils1
+import com.example.catapp.fakes.Utils1.ERROR_TEXT
 import com.example.catapp.utils.providers.DispatcherProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -31,7 +32,7 @@ class FakeFactsIdsViewModel(dispatcherProvider: DispatcherProvider) :
             _result.value = Result.Loading
             delay(1000)
             _result.value =
-                if (shouldMockError) Result.Error("todo") else Result.Success(Utils.TEST_IDS)
+                if (shouldMockError) Result.Error(ERROR_TEXT) else Result.Success(Utils1.TEST_IDS)
 
         }
     }

@@ -6,18 +6,22 @@ import com.example.catapp.data.entities.CatFactId
 import com.example.catapp.data.errorModel.ErrorModel
 import com.example.catapp.data.repository.CatFactRepository
 import com.example.catapp.utils.CoroutineScopeRule
-import com.example.catapp.utils.TestDispatchersProvider
-import com.example.catapp.utils.Utils.TEST_IDS
+import com.example.catapp.fakes.TestDispatcherProvider
+import com.example.catapp.fakes.Utils.ERROR_TEXT
+import com.example.catapp.fakes.Utils.RESPONSE_ERROR_404
+import com.example.catapp.fakes.Utils.TEST_IDS
 import com.example.catapp.utils.getOrAwaitValue
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.verify
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +31,7 @@ class CatFactsIdsViewModelTest {
 
 
     private val dispatchersProvider =
-        TestDispatchersProvider()
+        TestDispatcherProvider()
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -51,54 +55,39 @@ class CatFactsIdsViewModelTest {
 
 
     @Test
-    fun `when repository  returns Error ,Then `() {
-//        every { repository.getCatFactsIds() } returns
+    fun `when repository  returns Error_404 ,Then result is Error and message is ERROR_TEXT `() {
+//        coEvery { repository.getCatFactsIds() } returns
+        every { errorModel.getErrorMessage(RESPONSE_ERROR_404) } returns ERROR_TEXT
+        viewModel = DefaultCatFactsIdsViewModel(repository,errorModel,dispatchersProvider)
 
+        coroutineScopeRule.runBlockingTest {
 
+            viewModel.fetchData()
+            val result = viewModel.result.getOrAwaitValue()
 
-//        viewModel.fetchData()
-//        TEST_SCHEDULER.advanceTimeBy(100, TimeUnit.MILLISECONDS)
-//.
+            assertTrue(result is Result.Error)
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
     @Test
-    fun `when repository returns TEST_IDS, items value is TEST_IDS`() {
+    fun `when repository returns TEST_IDS, result is Success and value is TEST_IDS`() {
         coEvery { repository.getCatFactsIdsAsync() } returns CompletableDeferred(TEST_IDS)
-        viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
-
-        viewModel.fetchData()
-        val result = viewModel.result.getOrAwaitValue ()
-
-        assert(result is Result.Success)
-
-        val data = (result as Result.Success).data as List<CatFactId>
-
-        assertThat(data, `is`(TEST_IDS))
-    }
-
-    @Test
-    fun `when fetching data is unsuccessful, Then  activateErrorState is called after activateloadingState`() {
-//        every { repository.getCatFactsIdsRx() } returns Single.error(HttpException(RESPONSE_ERROR))
 
         viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
-        viewModel.fetchData()
 
-        verify {
-        }
-    }
-
-    @Test
-    fun `when fetching data is successful, Then  activate  SuccessState is called after activateloadingState`() {
-        viewModel = DefaultCatFactsIdsViewModel(repository, errorModel, dispatchersProvider)
         coroutineScopeRule.runBlockingTest {
             viewModel.fetchData()
+            val result = viewModel.result.getOrAwaitValue()
 
-            verify {
-            }
+            assertTrue( result is Result.Success)
+            val data = (result as Result.Success).data as List<CatFactId>
 
+            assertEquals(TEST_IDS,data)
         }
     }
+
+
 
 
     companion object

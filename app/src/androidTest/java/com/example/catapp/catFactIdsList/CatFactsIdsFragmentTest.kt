@@ -13,7 +13,7 @@ import com.example.catapp.R
 import com.example.catapp.catFactIdsList.FakeFactsIdsViewModel.Companion.shouldMockError
 import com.example.catapp.catFactsIdsList.CatFactsIdsViewModel
 import com.example.catapp.catFactsIdsList.CatFactsListAdapter
-import com.example.catapp.utils.TestDispatchersProvider
+import com.example.catapp.fakes.FakeDispatcherProvider
 import com.example.catapp.utils.providers.DispatcherProvider
 import io.mockk.MockKAnnotations
 import io.mockk.impl.annotations.MockK
@@ -31,7 +31,7 @@ class CatFactsIdsFragmentTest {
     @MockK
     lateinit var navController: NavController
 
-    private val dispatcherProvider: DispatcherProvider = TestDispatchersProvider()
+    private val dispatcherProvider: DispatcherProvider = FakeDispatcherProvider()
     private lateinit var viewModel: CatFactsIdsViewModel
     private lateinit var fragmentScenario: FragmentScenario<TestCatFactsIdsIdsFragment>
 
